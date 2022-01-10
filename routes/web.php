@@ -3,6 +3,8 @@
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\InscriptionController;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
 
@@ -34,6 +36,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('services', ServiceController::class );
+    Route::resource('inscriptions', InscriptionController::class );
+    Route::resource('payments',PaymentController::class);
 });
 
 

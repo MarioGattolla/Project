@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Inscriptions;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -42,6 +44,10 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Inscription[] $inscription
+ * @property-read int|null $inscription_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payment
+ * @property-read int|null $payment_count
  */
 class User extends Authenticatable
 {
@@ -64,6 +70,16 @@ class User extends Authenticatable
     public function role(): BelongsTo
     {
         return $this->belongsTo(Role::class);
+    }
+
+    public function inscription(): HasMany
+    {
+        return $this->hasMany(Inscription::class);
+    }
+
+    public function payment():HasMany
+    {
+        return $this->hasMany(Payment::class);
     }
 
     /**
