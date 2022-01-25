@@ -1,12 +1,11 @@
 <?php
 
-use App\Http\Controllers\Admin\UserController;
-use App\Http\Controllers\Admin\RoleController;
-use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\PaymentController;
-use App\Http\Controllers\Admin\InscriptionController;
+use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\UserController;
+use App\old\RoleController;
 use Illuminate\Support\Facades\Route;
-use App\Models\User;
 
 /*
 |--------------------------------------------------------------------------
@@ -28,15 +27,10 @@ Route::get('/dashboard', function () {
 
 
 Route::prefix('admin')->middleware('auth')->group(function () {
-//    Route::get('/users', [UserController::class, 'list'])->name('users.list');
-//    Route::get('/users/{user}', [UserController::class, 'show'])->name('users.show');
-//    Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-//    Route::put('/users/{user}', [UserController::class, 'update'])->name('users.update');
-
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
     Route::resource('services', ServiceController::class );
-    Route::resource('inscriptions', InscriptionController::class );
+    Route::resource('subscriptions', SubscriptionController::class );
     Route::resource('payments',PaymentController::class);
 });
 

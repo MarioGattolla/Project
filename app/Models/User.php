@@ -2,11 +2,10 @@
 
 namespace App\Models;
 
-use App\Inscriptions;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Subscriptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -17,8 +16,9 @@ use Laravel\Sanctum\HasApiTokens;
  *
  * @property int $id
  * @property string $name
+ * @property string $surname
  * @property string $email
- * @property \App\Models\Role|null $role
+ * @property \App\old\Role|null $role
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property string $password
  * @property string|null $remember_token
@@ -44,8 +44,8 @@ use Laravel\Sanctum\HasApiTokens;
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRoleId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  * @mixin \Eloquent
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Inscription[] $inscription
- * @property-read int|null $inscription_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription[] $subscription
+ * @property-read int|null $subscription_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payment
  * @property-read int|null $payment_count
  */
@@ -62,25 +62,10 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
+        'surname',
         'email',
         'password',
-        'role_id',
     ];
-
-    public function role(): BelongsTo
-    {
-        return $this->belongsTo(Role::class);
-    }
-
-    public function inscription(): HasMany
-    {
-        return $this->hasMany(Inscription::class);
-    }
-
-    public function payment():HasMany
-    {
-        return $this->hasMany(Payment::class);
-    }
 
     /**
      * The attributes that should be hidden for serialization.
@@ -99,6 +84,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'role' => \App\Enums\Role::class
     ];
 
     public function setPasswordAttribute(string|null $plaintext_password): void
@@ -108,5 +94,29 @@ class User extends Authenticatable
         }
 
         $this->attributes['password'] = \Hash::make($plaintext_password);
+    }
+
+    public function subscriptions(): HasMany
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function services(): HasManyThrough
+    {
+        return $this->hasManyThrough(Service::class, Subscription::class);
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function balance(User $user)
+    {
+
+//        $debit = $user->services();
+//        $credit =$user->payments()->sum('quote');
+//        $balance = $debit - $credit;
+        return $debit;
     }
 }

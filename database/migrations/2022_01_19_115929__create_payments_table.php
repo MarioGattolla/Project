@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class ChangeRoleNameUnique extends Migration
+class CreatePaymentsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,13 @@ class ChangeRoleNameUnique extends Migration
      */
     public function up()
     {
-         Schema::table('roles', function ($table)
-         {
-             $table->string('name')->unique;
-         });
+        Schema::create('payments',function (Blueprint $table)
+        {
+            $table->id();
+            $table->float('quote');
+            $table->date('date');
+        });
     }
+
 
 }

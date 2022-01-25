@@ -43,8 +43,7 @@
             </x-users.table.cell>
 
             <x-users.table.cell class="text-md text-gray-500">
-                @php if(!empty($user->role->name))
-                    {echo $user->role->name;}@endphp
+                {{$user->role->value}}
             </x-users.table.cell>
 
             <x-users.table.cell class="text-right text-md font-medium">

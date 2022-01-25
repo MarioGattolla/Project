@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateInscriptionServiceTable extends Migration
+class AddTimestampsToPayments extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,10 @@ class CreateInscriptionServiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('inscription_service', function (Blueprint $table)
-        {
-            $table->id();
+        Schema::table('payments', function (Blueprint $table) {
             $table->timestamps();
-            $table->integer('inscription_id');
-            $table->integer('service_id');
         });
     }
+
 
 }

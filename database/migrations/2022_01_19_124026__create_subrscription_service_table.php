@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddServiceToInscription extends Migration
+class CreateSubrscriptionServiceTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class AddServiceToInscription extends Migration
      */
     public function up()
     {
-        Schema::table('inscription_service', function (Blueprint $table) {
+        Schema::create('subscription_service',function (Blueprint $table)
+        {
+            $table->id();
+            $table->foreignId('subscription_id')->nullable()->constrained('subscriptions')->nullOnDelete();
             $table->foreignId('service_id')->nullable()->constrained('services')->nullOnDelete();
-            $table->foreignId('inscription_id')->nullable()->constrained('inscriptions')->nullOnDelete();
+
         });
     }
 

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddInscriptionToUser extends Migration
+class CreateSubscriptionTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,14 @@ class AddInscriptionToUser extends Migration
      */
     public function up()
     {
-        Schema::table('inscriptions', function (Blueprint $table) {
-            $table->foreignId('user_id')->nullable()->constrained('users')->nullOnDelete();
-        });
+        Schema::create('subscriptions',function (Blueprint $table)
+    {
+        $table->id();
+        $table->date('start');
+        $table->date('end');
+        $table->timestamps();
+    });
     }
+
 
 }

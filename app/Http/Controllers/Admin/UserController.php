@@ -3,15 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
 use App\Models\User;
-
-/** @var User[] $users */
-
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use function React\Promise\all;
 
+/** @var User[] $users */
 class UserController extends Controller
 {
     public function show(User $user): View
@@ -35,49 +32,55 @@ class UserController extends Controller
     {
         return view('admin.users.edit', [
             'user' => $user,
-            'available_roles' => Role::pluck('name', 'id'),
         ]);
 
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, User $user): RedirectResponse
     {
         $this->validate($request, [
             'name' => 'required',
+            'surname' => 'required',
+            'password' => 'required|password',
             'email' => 'required|email',
+            'role' => 'required',
         ]);
+
 
         $user->fill($request->all());
 
         $user->save();
 
-        return redirect()->route('users.show', $user)->with('success', 'Utente modificato correttamente!!');
+        return redirect()->route('users.show', $user)->with('success', 'User successfully changed!!');
     }
 
     public function create(): View
     {
-        return view('admin.users.create', [
-            'available_roles' => Role::pluck('name', 'id'),
-        ]);
+        return view('admin.users.create');
     }
 
-    public function store(Request $request)
+    public function store(Request $request):RedirectResponse
     {
+
         $this->validate($request, [
             'name' => 'required',
+            'surname' => 'required',
             'email' => 'required|email',
             'password' => 'required',
+            'role' => 'required',
         ]);
 
         User::create($request->all());
-        return redirect()->route('users.index')->with('success', 'Utente creato correttamente!!');
+        return redirect()->route('users.index')->with('success', 'User successfully created!!');
     }
 
-    public function destroy(User $user)
+    public function destroy(User $user):RedirectResponse
     {
         $user->delete();
-        return redirect()->route('users.index')->with('success', 'Utente eliminato correttamente!!');
+        return redirect()->route('users.index')->with('success', 'User successfully deleted!!');
     }
+
+
 
 }
 

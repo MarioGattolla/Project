@@ -17,7 +17,7 @@ use Illuminate\Support\Carbon;
 
 
 /**
- * App\Models\Inscription
+ * App\Models\Subscription
  *
  * @property int $id
  * @property Carbon $created_at
@@ -31,24 +31,23 @@ use Illuminate\Support\Carbon;
  * @property-read Collection|Service[] $service
  * @property-read int|null $service_count
  * @property-read User|null $user
- * @method static Builder|Inscription newModelQuery()
- * @method static Builder|Inscription newQuery()
- * @method static Builder|Inscription query()
- * @method static Builder|Inscription whereCreatedAt($value)
- * @method static Builder|Inscription whereEnd($value)
- * @method static Builder|Inscription whereId($value)
- * @method static Builder|Inscription whereStart($value)
- * @method static Builder|Inscription whereTime($value)
- * @method static Builder|Inscription whereUpdatedAt($value)
- * @method static Builder|Inscription whereUserId($value)
+ * @method static Builder|Subscription newModelQuery()
+ * @method static Builder|Subscription newQuery()
+ * @method static Builder|Subscription query()
+ * @method static Builder|Subscription whereCreatedAt($value)
+ * @method static Builder|Subscription whereEnd($value)
+ * @method static Builder|Subscription whereId($value)
+ * @method static Builder|Subscription whereStart($value)
+ * @method static Builder|Subscription whereTime($value)
+ * @method static Builder|Subscription whereUpdatedAt($value)
+ * @method static Builder|Subscription whereUserId($value)
  * @mixin Eloquent
  */
-class Inscription extends Model
+class Subscription extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'time',
         'end',
         'start',
         'user_id',

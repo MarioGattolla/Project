@@ -1,17 +1,15 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-namespace App\Http\Controllers\Admin;
+namespace App\old;
 
 
 use App\Http\Controllers\Controller;
-use App\Models\Role;
-
-/** @var Role[] $roles */
-
 use Illuminate\Http\Request;
 use Illuminate\View\View;
-use function React\Promise\all;
+use function redirect;
+use function view;
 
+/** @var Role[] $roles */
 class RoleController extends Controller
 {
 

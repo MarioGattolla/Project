@@ -12,7 +12,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @property int $id
  * @property string $name
  * @property float $price
- * @property string $description
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|Service newModelQuery()
@@ -25,8 +24,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @mixin \Eloquent
  * @method static \Illuminate\Database\Eloquent\Builder|Service whereDescription($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Service wherePrice($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Inscription[] $inscription
- * @property-read int|null $inscription_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription[] $subscription
+ * @property-read int|null $subscription_count
  */
 
 class Service extends Model
@@ -36,11 +35,10 @@ class Service extends Model
     protected $fillable = [
        'name',
        'price',
-       'description',
     ];
 
-    public function inscriptions(): BelongsToMany
+    public function subscriptions(): BelongsToMany
     {
-        return $this->belongsToMany(Inscription::class);
+        return $this->belongsToMany(Subscription::class);
     }
 }

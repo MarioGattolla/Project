@@ -10,24 +10,34 @@
     </x-slot>
     <div class="py-12 " name="body">
         <x-body-div class="px-3">
-            <x-div-box>
-                <x-div-box class="border-2 rounded border-gray-200 flex">
-                    <x-users.form.label> Nome: {{$user->name}}</x-users.form.label>
+            <div class="grid grid-cols-4 text-xl">
+                <div class="bg-gray-100  m-3 p-5 rounded float-left col-span-1 ">
+                    <x-users.form.label> USER DETAIL</x-users.form.label>
+                    <x-users.form.label> User Photo :</x-users.form.label>
 
-                    <x-users.form.label>Email: {{$user->email}}</x-users.form.label>
+                </div>
+                <div class="bg-blue-100   m-3 p-5 rounded float-left  col-span-3 ">
+                    <x-users.form.label> User Name : {{$user->name}}</x-users.form.label>
+                    <x-users.form.label> User Surname : {{$user->surname}}</x-users.form.label>
 
-                    <x-users.form.label>Role: @php if(!empty($user->role->name)){echo $user->role->name;}@endphp</x-users.form.label>
-                    <x-div-box class="py-3">
-                        <x-button class="mb-3"><a href="{{route('users.edit', $user)}}">Modifica</a></x-button>
-                        <form method="POST">
-                            @csrf
-                            @method('DELETE')
-                            <x-button>Delete</x-button>
-                        </form>
-                    </x-div-box>
-                </x-div-box>
-            </x-div-box>
+                    <x-users.form.label> User Role : {{$user->role->value}}</x-users.form.label>
+                    <x-users.form.label> User Email : {{$user->email}}</x-users.form.label>
+    {{--                    <x-users.form.label> User Balance : {{$user->balance($user)}}</x-users.form.label>--}}
+                </div>
+
+
+            </div>
+            <div class="m-5">
+            <x-button class="mb-3"><a href="{{route('users.edit', $user)}}">Edit</a></x-button>
+            <form method="POST">
+                @csrf
+                @method('DELETE')
+                <x-button>Delete</x-button>
+            </form>
+            </div>
         </x-body-div>
+
     </div>
+
 </x-app-layout>
 

@@ -1,14 +1,14 @@
 <x-app-layout>
     <x-slot name="header">
         <x-header>
-            {{ __('Create a new Inscription:  ') }}
+            {{ __('Create a new Subscription:  ') }}
         </x-header>
     </x-slot>
     <div class="py-12" name="body">
         <x-body-div>
             <x-div-box>
 
-                <form method="POST" action="/admin/inscriptions">
+                <form method="POST" action="/admin/subscriptions">
                     @csrf
                     <x-div-box class="border-gray-200 border-2 rounded">
 
@@ -20,7 +20,7 @@
                             @endforeach
                         </select>
 
-                        <x-users.form.label for="service_id" class="text-lg">Select the Services</x-users.form.label>
+                        <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>
                         @foreach($available_services as $service_id => $service_label)
                             <label>
                                 <input type="checkbox" name="services[]" value="{{$service_id}}">
@@ -31,11 +31,11 @@
 
 
                         <x-users.form.label for="start" class="text-lg">Subscription dates</x-users.form.label>
-                        <input type="date" id="start" min="{{today()->format('Y-m-d')}}">
+                        <input type="date" id="start" name="start" value="{{today()->format('Y-m-d')}}" min="{{today()->format('Y-m-d')}}">
                         -
-                        <input type="date" id="end" min="{{today()->format('Y-m-d')}}">
+                        <input type="date" id="end" name="end" value="{{today()->addMonth()->format('Y-m-d')}}" min="{{today()->format('Y-m-d')}}">
 
-                        <x-users.form.submit type="submit" name="submit" class="ml-12"/>
+                        <x-users.form.submit type="submit" value="Submit" name="submit" class="ml-12"/>
                     </x-div-box>
                 </form>
 
