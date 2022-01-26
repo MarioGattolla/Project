@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use App\Subscriptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -65,6 +66,7 @@ class User extends Authenticatable
         'surname',
         'email',
         'password',
+        'role',
     ];
 
     /**
@@ -84,7 +86,7 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'role' => \App\Enums\Role::class
+        'role' => Role::class
     ];
 
     public function setPasswordAttribute(string|null $plaintext_password): void
@@ -103,7 +105,10 @@ class User extends Authenticatable
 
     public function services(): HasManyThrough
     {
-        return $this->hasManyThrough(Service::class, Subscription::class);
+        return $this->hasManyThrough(
+            Service::class,
+            Subscription::class
+        );
     }
 
     public function payments(): HasMany
@@ -111,12 +116,16 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
-    public function balance(User $user)
+    public function balance(User $user): float
     {
 
-//        $debit = $user->services();
-//        $credit =$user->payments()->sum('quote');
-//        $balance = $debit - $credit;
-        return $debit;
+        $debit = $user
+            ->subscriptions
+            ->map(fn(Subscription $subscription) => $subscription->services()->sum('price'))
+            ->sum();
+
+        $credit = $user->payments()->sum('quote');
+
+        return $credit - $debit;
     }
 }

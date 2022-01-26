@@ -47,7 +47,7 @@
             </x-users.table.cell>
 
             <x-users.table.cell class="text-right text-md font-medium">
-                <x-nav-link href="{{route('users.show', $user)}}" class="text-indigo-600 hover:text-indigo-900">Edit</x-nav-link>
+                <x-nav-link href="{{route('users.show', $user)}}" class="text-indigo-600 hover:text-indigo-900">Show</x-nav-link>
             </x-users.table.cell>
         </tr>
     @endforeach

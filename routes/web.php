@@ -32,6 +32,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('services', ServiceController::class );
     Route::resource('subscriptions', SubscriptionController::class );
     Route::resource('payments',PaymentController::class);
+    Route::resource('coaches', CoachController::class);
 });
 
 

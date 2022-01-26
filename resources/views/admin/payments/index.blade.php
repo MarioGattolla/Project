@@ -24,7 +24,7 @@
                             <div for="quote">Payment Quote : €{{$payment->quote}}</div>
                             <div for="date">Payment Date : {{$payment->date->format('Y-m-d')}}</div>
                         </div>
-                        <x-button class="m-3" type="button" href="{{route('payments.show',$payment)}}">Edit
+                        <x-button class="m-3" type="button" href="{{route('payments.show',$payment)}}">Show
                         </x-button>
                     </div>
                 @endforeach

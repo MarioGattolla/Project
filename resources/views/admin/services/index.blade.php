@@ -25,7 +25,7 @@
                         </x-users.form.label>
 
                        <x-button href="{{route('services.edit',$service)}}" class="m-2">
-                            Modifica
+                            Edit
                         </x-button>
 
                         <form method="POST" action="/admin/services/{{$service->id}}" class="m-2">

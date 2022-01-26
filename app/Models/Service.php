@@ -41,4 +41,9 @@ class Service extends Model
     {
         return $this->belongsToMany(Subscription::class);
     }
+
+    public function coaches():BelongsToMany
+    {
+        return $this->belongsToMany(Coach::class);
+    }
 }

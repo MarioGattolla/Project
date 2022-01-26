@@ -22,18 +22,18 @@
 
                     <x-users.form.label> User Role : {{$user->role->value}}</x-users.form.label>
                     <x-users.form.label> User Email : {{$user->email}}</x-users.form.label>
-    {{--                    <x-users.form.label> User Balance : {{$user->balance($user)}}</x-users.form.label>--}}
+                    <x-users.form.label> User Balance : €{{$user->balance($user)}}</x-users.form.label>
                 </div>
 
 
             </div>
             <div class="m-5">
-            <x-button class="mb-3"><a href="{{route('users.edit', $user)}}">Edit</a></x-button>
-            <form method="POST">
-                @csrf
-                @method('DELETE')
-                <x-button>Delete</x-button>
-            </form>
+                <x-button class="mb-3"><a href="{{route('users.edit', $user)}}">Edit</a></x-button>
+                <form method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <x-button>Delete</x-button>
+                </form>
             </div>
         </x-body-div>
 

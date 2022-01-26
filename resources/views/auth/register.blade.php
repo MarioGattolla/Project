@@ -58,7 +58,7 @@
             <select name="role" id="role">
                 @foreach(\App\Enums\Role::values() as $role_id => $role_name)
                     <option
-                        value="{{$role_id}}" {{($role_id == \App\Enums\Role::user ? 'selected' : '')}}>{{$role_name}}</option>
+                        value="{{$role_name}}" {{($role_id == \App\Enums\Role::user->name ? 'selected' : '')}}>{{$role_name}}</option>
                 @endforeach
             </select>
 

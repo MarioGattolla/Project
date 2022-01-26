@@ -51,7 +51,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('users.show', $user)->with('success', 'User successfully changed!!');
+        return redirect()->route('users.show', $user)->with('success', 'User successfully updated !!');
     }
 
     public function create(): View
