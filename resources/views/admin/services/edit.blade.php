@@ -25,7 +25,7 @@
                     <x-users.form.label for="price" class="text-lg">Insert the new Service Price</x-users.form.label>
                     <x-users.form.imput name="price" class="ml-3" value="{{old('name', $service->price)}}"/>
                     <div class="px-3 py-12">
-                    <x-users.form.submit type="submit" value="Submite" class="px-3" name="submit"/>
+                    <x-users.form.submit type="submit" value="Submit" class="px-3" name="submit"/>
                     </div>
                 </form>
                 </x-div-box>

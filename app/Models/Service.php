@@ -26,6 +26,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
  * @method static \Illuminate\Database\Eloquent\Builder|Service wherePrice($value)
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription[] $subscription
  * @property-read int|null $subscription_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Coach[] $coaches
+ * @property-read int|null $coaches_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription[] $subscriptions
+ * @property-read int|null $subscriptions_count
  */
 
 class Service extends Model
@@ -42,8 +46,9 @@ class Service extends Model
         return $this->belongsToMany(Subscription::class);
     }
 
-    public function coaches():BelongsToMany
+
+    public function skill():BelongsToMany
     {
-        return $this->belongsToMany(Coach::class);
+        return $this->belongsToMany(User::class, 'skill', 'user_id','service_id');
     }
 }

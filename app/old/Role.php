@@ -28,9 +28,10 @@ class Role extends Model
     use HasFactory;
 
     /**
-    *@var array<string>
-    */
+     * @var array<string>
+     */
     protected $fillable = [
         'name',
     ];
 
+}

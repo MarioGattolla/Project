@@ -24,6 +24,7 @@
                <a href="{{route('users.index')}}">Users</a>
             </div>
 
+
             <!-- Navigation Bar Subscription Dropdown -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
                 <a href="{{route('subscriptions.index')}}">Subscriptions</a>

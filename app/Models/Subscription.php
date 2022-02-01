@@ -42,6 +42,10 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Subscription whereUpdatedAt($value)
  * @method static Builder|Subscription whereUserId($value)
  * @mixin Eloquent
+ * @property-read Collection|\App\Models\Payment[] $payments
+ * @property-read int|null $payments_count
+ * @property-read Collection|Service[] $services
+ * @property-read int|null $services_count
  */
 class Subscription extends Model
 {

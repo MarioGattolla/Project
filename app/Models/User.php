@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\Role;
 use App\Subscriptions;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -49,6 +50,13 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $subscription_count
  * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payment
  * @property-read int|null $payment_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
+ * @property-read int|null $payments_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Service[] $services
+ * @property-read int|null $services_count
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Subscription[] $subscriptions
+ * @property-read int|null $subscriptions_count
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
  */
 class User extends Authenticatable
 {
@@ -114,6 +122,11 @@ class User extends Authenticatable
     public function payments(): HasMany
     {
         return $this->hasMany(Payment::class);
+    }
+
+    public function skill():BelongsToMany
+    {
+        return $this->belongsToMany(Service::class,'skill', 'user_id','service_id');
     }
 
     public function balance(User $user): float

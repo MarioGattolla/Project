@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rules\Enum;
 use Illuminate\View\View;
 
 /** @var User[] $users */
@@ -15,6 +17,8 @@ class UserController extends Controller
     {
         return view('admin.users.show', [
             'user' => $user,
+            'subscrived_skill' =>$user->skill()->pluck('name', 'service_id'),
+
         ]);
     }
 
@@ -59,7 +63,7 @@ class UserController extends Controller
         return view('admin.users.create');
     }
 
-    public function store(Request $request):RedirectResponse
+    public function store(Request $request): RedirectResponse
     {
 
         $this->validate($request, [
@@ -74,12 +78,35 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User successfully created!!');
     }
 
-    public function destroy(User $user):RedirectResponse
+    public function beacoach(User $user): View
+    {
+        return view('admin.users.beacoach', [
+            'user' => $user,
+            'available_services' => Service::pluck('name', 'id')
+        ]);
+
+    }
+
+    public function beacoachUpdate(Request $request, User $user): RedirectResponse
+    {
+
+        $services = $request->input('services', []);
+
+        $user->skill()->sync($services);
+
+        $user->role = 'Coach';
+        $user->fill($request->all());
+
+        $user->save();
+
+        return redirect()->route('users.show', $user)->with('success', 'You Became a Coach!!');
+    }
+
+    public function destroy(User $user): RedirectResponse
     {
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User successfully deleted!!');
     }
-
 
 
 }

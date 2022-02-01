@@ -39,7 +39,7 @@
 
                     </select>
 
-                    <x-users.form.submit type="submit" value="Submite" name="submit"/>
+                    <x-users.form.submit type="submit" value="Submit" name="submit"/>
                 </form>
             </div>
         </x-body-div>
