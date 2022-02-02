@@ -32,7 +32,6 @@
                     <x-users.form.label for="roles">Choose a role :</x-users.form.label>
 
                     <select name="role" id="role">
-                        <option value="">{{$user->role->value}}</option>
                         @foreach(\App\Enums\Role::values() as $role_id => $role_name)
                             <option id="role" name="role" value="{{$role_name}}" {{($role_id == \App\Enums\Role::user->name ? 'selected' : '')}}>{{$role_name}}</option>
                         @endforeach

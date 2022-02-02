@@ -19,23 +19,23 @@
             </div>
 
 
-            <!-- Navigation Bar Users Dropdown -->
+            <!-- Navigation Bar Users -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
                <a href="{{route('users.index')}}">Users</a>
             </div>
 
 
-            <!-- Navigation Bar Subscription Dropdown -->
+            <!-- Navigation Bar Subscription -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
                 <a href="{{route('subscriptions.index')}}">Subscriptions</a>
             </div>
 
-            <!-- Navigation Bar Payments Dropdown -->
+            <!-- Navigation Bar Payments -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
                 <a href="{{route('payments.index')}}">Payments</a>
             </div>
 
-            <!-- Navigation Bar Services Dropdown -->
+            <!-- Navigation Bar Services -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
                 <a href="{{route('services.index')}}">Services</a>
             </div>

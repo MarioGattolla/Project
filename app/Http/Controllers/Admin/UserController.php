@@ -7,17 +7,45 @@ use App\Models\Service;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\Rules\Enum;
 use Illuminate\View\View;
 
 /** @var User[] $users */
 class UserController extends Controller
 {
+    public function dashboard(User $user)
+    {
+        $user=Auth::user();
+        switch ($user->role->value) {
+            case 'Admin':
+                return view('adminDashboard', [
+                    'user' => $user,
+
+                ]);
+                break;
+
+            case 'User':
+                return view('dashboard', [
+                    'user' => $user,
+                ]);
+                break;
+
+            case 'Coach':
+                return view('coachDashboard', [
+                    'user' => $user,
+                    'skills' =>$user->skill()->pluck('name', 'service_id'),
+
+                ]);
+                break;
+        }
+    }
+
     public function show(User $user): View
     {
         return view('admin.users.show', [
             'user' => $user,
-            'subscrived_skill' =>$user->skill()->pluck('name', 'service_id'),
+            'subscrived_skill' => $user->skill()->pluck('name', 'service_id'),
 
         ]);
     }
@@ -89,6 +117,9 @@ class UserController extends Controller
 
     public function beacoachUpdate(Request $request, User $user): RedirectResponse
     {
+        $this->validate($request, [
+            'services' => ' required',
+        ]);
 
         $services = $request->input('services', []);
 

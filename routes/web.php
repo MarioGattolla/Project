@@ -22,21 +22,19 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('roles', RoleController::class);
-    Route::resource('services', ServiceController::class );
-    Route::resource('subscriptions', SubscriptionController::class );
-    Route::resource('payments',PaymentController::class);
+    Route::resource('services', ServiceController::class);
+    Route::resource('subscriptions', SubscriptionController::class);
+    Route::resource('payments', PaymentController::class);
 
 });
-Route::get('/admin/users/{user}/beacoach',[UserController::class,'beacoach'])->middleware(['auth'])->name('beacoach');
-Route::put('/admin/users/{user}/beacoach',[UserController::class,'beacoachUpdate'])->middleware(['auth'])->name('beacoachUpdate');
+Route::get('/admin/users/{user}/beacoach', [UserController::class, 'beacoach'])->middleware(['auth'])->name('beacoach');
+Route::put('/admin/users/{user}/beacoach', [UserController::class, 'beacoachUpdate'])->middleware(['auth'])->name('beacoachUpdate');
 
 
 require __DIR__ . '/auth.php';
