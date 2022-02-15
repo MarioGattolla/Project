@@ -12,13 +12,24 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 bg-white border-b border-gray-200">
+                <div class="m-3 p-3 bg-white border-b border-gray-200 text-xl">
                     Welcome Back, {{$user->name}} {{$user->surname}}
                 </div>
-                <div>Here your course coaching:</div>
+                <div class="p-3 m-3 text-lg">Here are your course coaching:</div>
+
                 @foreach($skills as $skill)
-                    <li>{{$skill}}</li>
+                    <div class="m-3">
+                    <li class="p-3 m-3 bg-indigo-100 border-2 rounded-md text-lg">{{$skill}}</li>
+                    <div class="grid grid-cols-6">
+                        @foreach($user->showUsersCoachedList($user, $skill ) as $coached_user)
+                            <div class="col-span-1 border-2 bg-gray-50 m-2">
+                                {{$coached_user->name}} , {{$coached_user->surname}}
+                            </div>
+                        @endforeach
+                    </div>
+            </div>
                 @endforeach
+
             </div>
         </div>
     </div>

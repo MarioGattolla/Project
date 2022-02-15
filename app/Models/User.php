@@ -124,9 +124,9 @@ class User extends Authenticatable
         return $this->hasMany(Payment::class);
     }
 
-    public function skill():BelongsToMany
+    public function skill(): BelongsToMany
     {
-        return $this->belongsToMany(Service::class,'skill', 'user_id','service_id');
+        return $this->belongsToMany(Service::class, 'skill', 'user_id', 'service_id');
     }
 
     public function balance(User $user): float
@@ -140,5 +140,15 @@ class User extends Authenticatable
         $credit = $user->payments()->sum('quote');
 
         return $credit - $debit;
+    }
+
+    public function showUsersCoachedList(User $user, $skill)
+    {
+        $subscriptions = Subscription::query()
+            ->whereRelation('services','name',$skill)
+            ->get();
+
+        $users = User::find($subscriptions->pluck('user_id','id'));
+        return $users;
     }
 }

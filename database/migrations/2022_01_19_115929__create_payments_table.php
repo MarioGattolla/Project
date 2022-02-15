@@ -17,7 +17,6 @@ class CreatePaymentsTable extends Migration
         {
             $table->id();
             $table->float('quote');
-            $table->date('date');
         });
     }
 

@@ -16,7 +16,7 @@ class UserController extends Controller
 {
     public function dashboard(User $user)
     {
-        $user=Auth::user();
+        $user = Auth::user();
         switch ($user->role->value) {
             case 'Admin':
                 return view('adminDashboard', [
@@ -34,7 +34,7 @@ class UserController extends Controller
             case 'Coach':
                 return view('coachDashboard', [
                     'user' => $user,
-                    'skills' =>$user->skill()->pluck('name', 'service_id'),
+                    'skills' => $user->skill()->pluck('name', 'service_id'),
 
                 ]);
                 break;

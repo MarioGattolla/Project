@@ -13,7 +13,7 @@ class CreateSubrscriptionServiceTable extends Migration
      */
     public function up()
     {
-        Schema::create('subscription_service',function (Blueprint $table)
+        Schema::create('service_subscription',function (Blueprint $table)
         {
             $table->id();
             $table->foreignId('subscription_id')->nullable()->constrained('subscriptions')->nullOnDelete();
