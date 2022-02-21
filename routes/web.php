@@ -18,8 +18,7 @@ use App\Http\Controllers\Admin\CoachController;
 | contains the "web" middleware group. Now create something great!
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function () {return view('welcome');
 });
 
 Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');

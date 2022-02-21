@@ -142,7 +142,18 @@ class User extends Authenticatable
         return $credit - $debit;
     }
 
-    public function showUsersCoachedList(User $user, $skill)
+    public function show_user_subscribed_services() : Collection
+    {
+        return $this->subscriptions
+            ->flatMap(fn(Subscription $subscription) => $subscription->services->pluck('name'))
+            ->unique()
+            ->sort();
+    }
+
+    /**
+     * @return Collection<User>
+     */
+    public function show_users_coached_list_for_skill($skill): Collection
     {
         $subscriptions = Subscription::query()
             ->whereRelation('services','name',$skill)

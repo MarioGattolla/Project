@@ -4,45 +4,33 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Service;
+use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Validation\Rules\Enum;
 use Illuminate\View\View;
 
 /** @var User[] $users */
 class UserController extends Controller
 {
-    public function dashboard(User $user)
+    public function dashboard(): \Illuminate\Contracts\View\View
     {
         $user = Auth::user();
-        switch ($user->role->value) {
-            case 'Admin':
-                return view('adminDashboard', [
-                    'user' => $user,
 
-                ]);
-                break;
+        $view = match ($user->role->value) {
+            'Admin' => 'admin-dashboard',
+            'Coach' => 'coach-dashboard',
+            default => 'user-dashboard',
+        };
 
-            case 'User':
-                return view('dashboard', [
-                    'user' => $user,
-                ]);
-                break;
-
-            case 'Coach':
-                return view('coachDashboard', [
-                    'user' => $user,
-                    'skills' => $user->skill()->pluck('name', 'service_id'),
-
-                ]);
-                break;
-        }
+        return view($view)->with('user', $user);
     }
 
-    public function show(User $user): View
+    public function show(User $user): \Illuminate\Contracts\View\View
     {
+        $this->authorize('view', $user);
+
         return view('admin.users.show', [
             'user' => $user,
             'subscrived_skill' => $user->skill()->pluck('name', 'service_id'),
@@ -52,6 +40,8 @@ class UserController extends Controller
 
     public function index(): View
     {
+        $this->authorize('viewAny', User::class);
+
         $users = User::paginate(20);
 
         return view('admin.users.index', [
@@ -62,6 +52,8 @@ class UserController extends Controller
 
     public function edit(User $user): View
     {
+        $this->authorize('update', $user);
+
         return view('admin.users.edit', [
             'user' => $user,
         ]);
@@ -70,6 +62,8 @@ class UserController extends Controller
 
     public function update(Request $request, User $user): RedirectResponse
     {
+        $this->authorize('update', $user);
+
         $this->validate($request, [
             'name' => 'required',
             'surname' => 'required',
@@ -93,6 +87,7 @@ class UserController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+        $this->authorize('create', User::class);
 
         $this->validate($request, [
             'name' => 'required',
@@ -135,6 +130,8 @@ class UserController extends Controller
 
     public function destroy(User $user): RedirectResponse
     {
+        $this->authorize('delete', $user);
+
         $user->delete();
         return redirect()->route('users.index')->with('success', 'User successfully deleted!!');
     }

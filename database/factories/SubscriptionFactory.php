@@ -5,9 +5,7 @@ namespace Database\Factories;
 use App\Models\Service;
 use App\Models\Subscription;
 use App\Models\User;
-use Carbon\Carbon;
 use Carbon\CarbonImmutable;
-use Carbon\CarbonInterface;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 class SubscriptionFactory extends Factory

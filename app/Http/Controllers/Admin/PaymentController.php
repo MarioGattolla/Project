@@ -4,14 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
-use App\Models\Subscription;
 use App\Models\User;
+use Illuminate\Auth\Access\AuthorizationException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
 /** @var Payment[] $payments */
 class PaymentController extends Controller
 {
+    /**
+     * @throws AuthorizationException
+     */
     public function show(Payment $payment): View
     {
         $this->authorize('view', $payment);
@@ -21,6 +26,9 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function index(): View
     {
         $this->authorize('viewAny', Payment::class);
@@ -34,6 +42,9 @@ class PaymentController extends Controller
 
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function edit(Payment $payment): View
     {
         $this->authorize('update', $payment);
@@ -46,7 +57,11 @@ class PaymentController extends Controller
 
     }
 
-    public function update(Request $request, Payment $payment)
+    /**
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function update(Request $request, Payment $payment): RedirectResponse
     {
         $this->authorize('update', $payment);
 
@@ -62,6 +77,9 @@ class PaymentController extends Controller
         return redirect()->route('payments.show', $payment)->with('success', 'Payment successfully modified!!');
     }
 
+    /**
+     * @throws AuthorizationException
+     */
     public function create(): View
     {
         $this->authorize('create', Payment::class);
@@ -73,7 +91,11 @@ class PaymentController extends Controller
         ]);
     }
 
-    public function store(Request $request)
+    /**
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', Payment::class);
 
@@ -89,7 +111,10 @@ class PaymentController extends Controller
         return redirect()->route('payments.index')->with('success', 'Payment successfully created!!');
     }
 
-    public function destroy(Payment $payment)
+    /**
+     * @throws AuthorizationException
+     */
+    public function destroy(Payment $payment): RedirectResponse
     {
         $this->authorize('delete', $payment);
 

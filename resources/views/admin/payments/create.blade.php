@@ -4,7 +4,7 @@
             {{ __('Create a new Payment:  ') }}
         </x-header>
     </x-slot>
-    <div class="py-12" name="body">
+    <div class="py-12">
         <x-body-div>
             <x-div-box>
 

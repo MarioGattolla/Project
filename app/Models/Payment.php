@@ -2,13 +2,11 @@
 
 namespace App\Models;
 
-use App\Models\User;
-use App\Models\Subscription;
+use Eloquent;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use phpDocumentor\Reflection\Types\Float_;
-use phpDocumentor\Reflection\Types\Null_;
 use Illuminate\Support\Carbon;
 
 
@@ -20,22 +18,22 @@ use Illuminate\Support\Carbon;
  * @property Carbon|null $date
  * @property int $user_id
  * @property int $subscription_id
- * @property \Illuminate\Support\Carbon|null $created_at
- * @property \Illuminate\Support\Carbon|null $updated_at
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription newModelQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription newQuery()
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription query()
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereCreatedAt($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereName($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Subscription whereUpdatedAt($value)
- * @mixin \Eloquent
+ * @property Carbon|null $created_at
+ * @property Carbon|null $updated_at
+ * @method static Builder|Subscription newModelQuery()
+ * @method static Builder|Subscription newQuery()
+ * @method static Builder|Subscription query()
+ * @method static Builder|Subscription whereCreatedAt($value)
+ * @method static Builder|Subscription whereId($value)
+ * @method static Builder|Subscription whereName($value)
+ * @method static Builder|Subscription whereUpdatedAt($value)
+ * @mixin Eloquent
  * @property-read Subscription|null $subscription
  * @property-read User|null $user
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereDate($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereSubscriptionId($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereQuote($value)
- * @method static \Illuminate\Database\Eloquent\Builder|Payment whereUserId($value)
+ * @method static Builder|Payment whereDate($value)
+ * @method static Builder|Payment whereSubscriptionId($value)
+ * @method static Builder|Payment whereQuote($value)
+ * @method static Builder|Payment whereUserId($value)
  */
 
 class Payment extends Model
