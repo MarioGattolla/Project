@@ -58,7 +58,7 @@ use Laravel\Sanctum\HasApiTokens;
  * @property-read int|null $subscriptions_count
  * @method static \Illuminate\Database\Eloquent\Builder|User whereSurname($value)
  */
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail
 {
     use HasApiTokens;
     use HasFactory;

@@ -1,31 +1,18 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use App\Models\Service;
-use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use function redirect;
+use function view;
 
-/** @var User[] $users */
 class UserController extends Controller
 {
-    public function dashboard(): \Illuminate\Contracts\View\View
-    {
-        $user = Auth::user();
 
-        $view = match ($user->role->value) {
-            'Admin' => 'admin-dashboard',
-            'Coach' => 'coach-dashboard',
-            default => 'user-dashboard',
-        };
-
-        return view($view)->with('user', $user);
-    }
 
     public function show(User $user): \Illuminate\Contracts\View\View
     {
@@ -96,6 +83,7 @@ class UserController extends Controller
             'password' => 'required',
             'role' => 'required',
         ]);
+
 
         User::create($request->all());
         return redirect()->route('users.index')->with('success', 'User successfully created!!');

@@ -1,12 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\CoachController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriptionController;
-use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\UserController;
 use App\old\RoleController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Admin\CoachController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,11 +19,11 @@ use App\Http\Controllers\Admin\CoachController;
 | contains the "web" middleware group. Now create something great!
 */
 
-Route::get('/', function () {return view('welcome');
+Route::get('/', function () {
+    return view('welcome');
 });
 
-Route::get('/dashboard', [UserController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
-
+Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
