@@ -1,6 +1,8 @@
 @php
     use App\Models\Subscription;
     /** @var Subscription[] $subscriptions */
+        $subscriptions = Subscription::all();
+
 @endphp
 
 <x-app-layout>

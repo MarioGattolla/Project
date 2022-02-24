@@ -1,6 +1,8 @@
 @php
     use App\Models\Payment;
     /** @var Payment[] $payments */
+        $payments = Payment::all();
+
 @endphp
 
 <x-app-layout>

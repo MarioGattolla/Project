@@ -15,7 +15,7 @@
                         <x-users.form.label for="user_id" class="text-lg">Select the User</x-users.form.label>
                         <select name="user_id" id="user_id">
                             <option value="">--Select--</option>
-                            @foreach($available_users as $user_id => $user_surname)
+                            @foreach(\App\Models\User::pluck('surname', 'id') as $user_id => $user_surname)
                                 <option value="{{$user_id}}">{{$user_surname}}</option>
                             @endforeach
                         </select>

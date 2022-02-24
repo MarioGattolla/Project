@@ -1,3 +1,6 @@
+<?php
+$users = \App\Models\User::paginate(20);
+?>
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
@@ -14,6 +17,7 @@
                     </x-nav-link>
                 </x-div-box>
                 <x-users.table :users="$users"/>
+
                 {{$users->links()}}
                     </x-div-box>
             </x-div-box>

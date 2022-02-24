@@ -11,23 +11,26 @@
 |
 */
 
+use Illuminate\Auth\Access\AuthorizationException;
+
 uses(Tests\TestCase::class)->in('Feature');
 uses(Tests\TestCase::class)->in('Unit');
 
-/*
-|--------------------------------------------------------------------------
-| Expectations
-|--------------------------------------------------------------------------
-|
-| When you're writing tests, you often need to check that values meet certain conditions. The
-| "expect()" function gives you access to a set of "expectations" methods that you can use
-| to assert different things. Of course, you may extend the Expectation API at any time.
-|
-*/
 
-expect()->extend('toBeOne', function () {
-    return $this->toBe(1);
+expect()->extend('toBeView', function(string $name, string ...$parameters){
+    expect($this->value)->toBeInstanceOf(\Illuminate\View\View::class);
+
+    $view = $this->value;
+
+    /** @var \Illuminate\View\View::class $view */
+    expect($view->name())->toBe($name);
+
+    if(count($parameters)>0){
+        expect($view->data())->toHaveKeys($parameters);
+    }
 });
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -40,7 +43,16 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
-{
-    // ..
+function allow_authorize(string $ability, mixed ...$params){
+    Gate::shouldReceive('authorize')
+        ->with($ability, ...$params)
+        ->atLeast()->once()
+        ->andReturn(\Illuminate\Auth\Access\Response::allow());
+}
+
+function deny_authorize(string $ability, mixed ...$params){
+    Gate::shouldReceive('authorize')
+        ->with($ability, ...$params)
+        ->atLeast()->once()
+        ->andThrow(new AuthorizationException());
 }

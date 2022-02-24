@@ -26,7 +26,7 @@
 
                     @if($user->role->value == 'Coach')
                     <x-users.form.label for="" class="text-lg">Services :</x-users.form.label>
-                    @foreach($subscrived_skill as $skill)
+                    @foreach($user->skill()->pluck('name', 'service_id') as $skill)
                         <li class="m-3 ">{{$skill}}</li>
                     @endforeach
                     @endif

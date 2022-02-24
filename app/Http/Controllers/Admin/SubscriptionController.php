@@ -18,10 +18,10 @@ class SubscriptionController extends Controller
 {
     public function create(): View
     {
-        return view('admin.subscriptions.create', [
-            'available_users' => User::pluck('surname', 'id'),
-            'available_services' => Service::pluck('name', 'id'),
-        ]);
+        $this->authorize('create', Subscription::class);
+
+        return view('admin.subscriptions.create'
+        );
     }
 
     public function store(Request $request): RedirectResponse
@@ -47,10 +47,7 @@ class SubscriptionController extends Controller
     {
         $this->authorize('viewAny', Subscription::class);
 
-        $subscriptions = Subscription::all();
         return view('admin.subscriptions.index', [
-            'subscriptions' => $subscriptions,
-
         ]);
     }
 
@@ -60,9 +57,6 @@ class SubscriptionController extends Controller
 
         return view('admin.subscriptions.show', [
             'subscription' => $subscription,
-            'subscrived_services' =>$subscription->services()->pluck('name', 'service_id'),
-
-
         ]);
     }
 
@@ -72,7 +66,6 @@ class SubscriptionController extends Controller
 
         return view('admin.subscriptions.edit', [
             'subscription' => $subscription,
-            'available_services' => Service::pluck('name', 'id'),
         ]);
     }
 

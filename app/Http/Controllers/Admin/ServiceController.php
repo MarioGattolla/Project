@@ -50,10 +50,7 @@ class ServiceController extends Controller
     {
         $this->authorize('viewAny', Service::class);
 
-        $services = Service::all();
-        return view('admin.services.index', [
-            'services' => $services
-        ]);
+        return view('admin.services.index');
     }
 
     /**

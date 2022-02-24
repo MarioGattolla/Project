@@ -1,6 +1,7 @@
 @php
     use App\Models\Service;
     /** @var Service[] $services */
+        $services = Service::all();
 @endphp
 
 <x-app-layout>

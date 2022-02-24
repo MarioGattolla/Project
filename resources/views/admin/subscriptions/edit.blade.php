@@ -24,7 +24,7 @@
                         </x-users.form.label>
 
                         <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>
-                        @foreach($available_services as $service_id => $service_label)
+                        @foreach(\App\Models\Service::pluck('name', 'id') as $service_id => $service_label)
                             <label class="ml-3">
                                 <input type="checkbox" name="services[]" value="{{$service_id}}">
                                 {{$service_label}}

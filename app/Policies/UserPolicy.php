@@ -71,4 +71,10 @@ class UserPolicy
         return $user->role == Role::admin;
 
     }
+
+    public function beacoach(User $user, User $model)
+    {
+        return $user->role == Role::admin;
+
+    }
 }

@@ -20,8 +20,6 @@ class UserController extends Controller
 
         return view('admin.users.show', [
             'user' => $user,
-            'subscrived_skill' => $user->skill()->pluck('name', 'service_id'),
-
         ]);
     }
 
@@ -29,10 +27,8 @@ class UserController extends Controller
     {
         $this->authorize('viewAny', User::class);
 
-        $users = User::paginate(20);
 
         return view('admin.users.index', [
-            'users' => $users,
         ]);
 
     }
@@ -69,12 +65,15 @@ class UserController extends Controller
 
     public function create(): View
     {
+        $this->authorize('create', User::class);
+
         return view('admin.users.create');
     }
 
     public function store(Request $request): RedirectResponse
     {
         $this->authorize('create', User::class);
+
 
         $this->validate($request, [
             'name' => 'required',
@@ -91,9 +90,10 @@ class UserController extends Controller
 
     public function beacoach(User $user): View
     {
+        $this->authorize('beacoach', $user);
+
         return view('admin.users.beacoach', [
             'user' => $user,
-            'available_services' => Service::pluck('name', 'id')
         ]);
 
     }

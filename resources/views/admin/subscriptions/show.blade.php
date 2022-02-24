@@ -26,7 +26,7 @@
                 </div>
                 <div class="col-span-3 bg-gray-50 rounded-md mb-3 p-3">
                     <x-users.form.label for="name" class="text-lg">Subscrived Services :</x-users.form.label>
-                    @foreach($subscrived_services as $service)
+                    @foreach($subscription->services()->pluck('name', 'service_id') as $service)
                         <li class="m-3 ">{{$service}}</li>
                     @endforeach
 

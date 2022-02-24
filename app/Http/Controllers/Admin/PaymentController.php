@@ -33,12 +33,7 @@ class PaymentController extends Controller
     {
         $this->authorize('viewAny', Payment::class);
 
-
-        $payments = Payment::all();
-
-        return view('admin.payments.index', [
-            'payments' => $payments,
-        ]);
+        return view('admin.payments.index');
 
     }
 
@@ -51,8 +46,6 @@ class PaymentController extends Controller
 
         return view('admin.payments.edit', [
             'payment' => $payment,
-            'available_users' => User::pluck('surname', 'id'),
-
         ]);
 
     }
@@ -84,11 +77,7 @@ class PaymentController extends Controller
     {
         $this->authorize('create', Payment::class);
 
-
-        return view('admin.payments.create', [
-            'available_users' => User::pluck('surname', 'id'),
-
-        ]);
+        return view('admin.payments.create');
     }
 
     /**
@@ -119,7 +108,7 @@ class PaymentController extends Controller
         $this->authorize('delete', $payment);
 
         $payment->delete();
-        return redirect()->route('payments.index')->with('success', 'payment successfully deleted!!');
+        return redirect()->route('payments.index')->with('success', 'Payment successfully deleted!!');
     }
 
 }
