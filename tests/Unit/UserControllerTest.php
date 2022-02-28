@@ -2,6 +2,11 @@
 
 use App\Http\Controllers\UserController;
 use App\Models\User;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+
+uses(RefreshDatabase::class);
 
 test('user.show return view', function () {
 
@@ -58,3 +63,23 @@ test('user.beacoach return view', function () {
 
     expect($response)->toBeView('admin.users.beacoach');
 });
+
+
+test('user store return redirect', function () {
+
+
+    allow_authorize('create', User::class);
+
+    $request = Request::create('/admin/users/create', 'POST',[
+        'name' => 'Mario',
+        'surname' => 'Gattolla',
+        'email' => 'email@libero.it',
+        'role' => 'User',
+        'password' => ' password',
+    ]);
+
+    $response = app(UserController::class)->store($request);
+
+    expect($response)->toBeRedirect();
+});
+

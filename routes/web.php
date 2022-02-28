@@ -6,7 +6,6 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\UserController;
-use App\old\RoleController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,8 +26,7 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(
 
 Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('roles', RoleController::class);
-    Route::resource('services', ServiceController::class);
+    Route::resource('services', ServiceController::class)->except('show');
     Route::resource('subscriptions', SubscriptionController::class);
     Route::resource('payments', PaymentController::class);
 
