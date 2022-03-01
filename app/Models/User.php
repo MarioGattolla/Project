@@ -104,6 +104,10 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'role' => Role::class
     ];
+    /**
+     * @var mixed|string
+     */
+    private mixed $role;
 
     public function setPasswordAttribute(string|null $plaintext_password): void
     {

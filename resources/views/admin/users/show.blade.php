@@ -14,26 +14,21 @@
                 <div class="bg-gray-100  m-3 p-5 rounded float-left col-span-1 ">
                     <x-users.form.label> USER DETAIL</x-users.form.label>
                     <x-users.form.label> User Photo :</x-users.form.label>
-
                 </div>
+
                 <div class="bg-blue-100   m-3 p-5 rounded float-left  col-span-3 ">
                     <x-users.form.label> User Name : {{$user->name}}</x-users.form.label>
                     <x-users.form.label> User Surname : {{$user->surname}}</x-users.form.label>
-
-                    <x-users.form.label>  Role : {{$user->role->value}}</x-users.form.label>
+                    <x-users.form.label> Role : {{$user->role->value}}</x-users.form.label>
                     <x-users.form.label> User Email : {{$user->email}}</x-users.form.label>
                     <x-users.form.label> User Balance : €{{$user->balance($user)}}</x-users.form.label>
-
                     @if($user->role->value == 'Coach')
-                    <x-users.form.label for="" class="text-lg">Services :</x-users.form.label>
-                    @foreach($user->skill()->pluck('name', 'service_id') as $skill)
-                        <li class="m-3 ">{{$skill}}</li>
-                    @endforeach
+                        <x-users.form.label for="" class="text-lg">Services :</x-users.form.label>
+                        @foreach($user->skill()->pluck('name', 'service_id') as $skill)
+                            <li class="m-3 ">{{$skill}}</li>
+                        @endforeach
                     @endif
-
-
                 </div>
-
 
             </div>
             <div class="m-5">
@@ -45,6 +40,7 @@
                     <x-button>Delete</x-button>
                 </form>
             </div>
+
         </x-body-div>
 
     </div>

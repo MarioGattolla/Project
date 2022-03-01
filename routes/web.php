@@ -4,8 +4,8 @@ use App\Http\Controllers\Admin\CoachController;
 use App\Http\Controllers\Admin\PaymentController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriptionController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -31,8 +31,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('payments', PaymentController::class);
 
 });
-Route::get('/admin/users/{user}/beacoach', [UserController::class, 'beacoach'])->middleware(['auth'])->name('beacoach');
-Route::put('/admin/users/{user}/beacoach', [UserController::class, 'beacoachUpdate'])->middleware(['auth'])->name('beacoachUpdate');
+Route::get('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach'])->middleware(['auth'])->name('beacoach');
+Route::put('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach_update'])->middleware(['auth'])->name('beacoachUpdate');
 
 
 require __DIR__ . '/auth.php';

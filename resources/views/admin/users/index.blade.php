@@ -1,5 +1,7 @@
 <?php
-$users = \App\Models\User::paginate(20);
+use App\Models\User;
+/** @var User[] $users */
+$users = User::paginate(20);
 ?>
 <x-app-layout>
     <x-slot name="header">

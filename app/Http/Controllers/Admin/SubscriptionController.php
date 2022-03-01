@@ -26,6 +26,7 @@ class SubscriptionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
+//        dd($request);
         $this->authorize('create', Subscription::class);
 
         $this->validate($request, [
@@ -72,6 +73,7 @@ class SubscriptionController extends Controller
     public function update(Request $request, Subscription $subscription): RedirectResponse
     {
         $this->authorize('update', $subscription);
+
 
         $this->validate($request, [
             'start' => 'required|date',

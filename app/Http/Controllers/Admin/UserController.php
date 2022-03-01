@@ -1,14 +1,16 @@
 <?php /** @noinspection PhpUnhandledExceptionInspection */
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Admin;
 
-use App\Models\Service;
+
+use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use function redirect;
 use function view;
+
 
 class UserController extends Controller
 {
@@ -50,7 +52,7 @@ class UserController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'surname' => 'required',
-            'password' => 'required|password',
+            'password' => 'required',
             'email' => 'required|email',
             'role' => 'required',
         ]);
@@ -88,7 +90,7 @@ class UserController extends Controller
         return redirect()->route('users.index')->with('success', 'User successfully created!!');
     }
 
-    public function beacoach(User $user): View
+    public function be_a_coach(User $user): View
     {
         $this->authorize('beacoach', $user);
 
@@ -98,7 +100,7 @@ class UserController extends Controller
 
     }
 
-    public function beacoachUpdate(Request $request, User $user): RedirectResponse
+    public function be_a_coach_update(Request $request, User $user): RedirectResponse
     {
         $this->validate($request, [
             'services' => ' required',

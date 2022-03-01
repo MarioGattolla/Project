@@ -1,7 +1,7 @@
 @php
     use App\Models\Payment;
     /** @var Payment[] $payments */
-        $payments = Payment::all();
+        $payments = Payment::paginate(15);
 
 @endphp
 
@@ -17,7 +17,7 @@
             <div class="m-3 p-3">
                 <a href="{{route('payments.create')}}" class="text-xl m-3 p-3  ">Create a new Payment</a>
             </div>
-            <div class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 m-3 p-3 text-xl">
+            <div class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 m-3 p-3 ">
                 @foreach($payments as $payment)
                     <div class="mb-5 border-2 border-gray-200 rounded col-span-2 ">
                         <div class="bg-blue-100 rounded-md p-2 m-2" for="user_id">Payment User
@@ -31,6 +31,7 @@
                     </div>
                 @endforeach
             </div>
+            {{$payments->links()}}
         </x-body-div>
     </div>
 

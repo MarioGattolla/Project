@@ -24,10 +24,10 @@
                     <x-users.form.imput id="surname" name="surname" value="{{old('surname', $user->surname)}}"/>
 
                     <x-users.form.label for="email">Email</x-users.form.label>
-                    <x-users.form.imput name="email" value="{{old('email', $user->email)}}"/>
+                    <x-users.form.imput id='email' name="email" value="{{old('email', $user->email)}}"/>
 
                     <x-users.form.label for="password">Password</x-users.form.label>
-                    <x-users.form.imput name="password"/>
+                    <x-users.form.imput id='password' name="password"/>
 
                     <x-users.form.label for="roles">Choose a role :</x-users.form.label>
 

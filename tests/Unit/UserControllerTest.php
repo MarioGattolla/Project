@@ -1,9 +1,8 @@
 <?php
 
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\Admin\UserController;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 uses(RefreshDatabase::class);
@@ -59,18 +58,17 @@ test('user.beacoach return view', function () {
 
     allow_authorize('beacoach', $user);
 
-    $response = app(UserController::class)->beacoach($user);
+    $response = app(UserController::class)->be_a_coach($user);
 
     expect($response)->toBeView('admin.users.beacoach');
 });
 
 
-test('user store return redirect', function () {
-
+test('user.store return redirect', function () {
 
     allow_authorize('create', User::class);
 
-    $request = Request::create('/admin/users/create', 'POST',[
+    $request = Request::create('/admin/users/create', 'POST', [
         'name' => 'Mario',
         'surname' => 'Gattolla',
         'email' => 'email@libero.it',
@@ -83,3 +81,36 @@ test('user store return redirect', function () {
     expect($response)->toBeRedirect();
 });
 
+
+test('user.update return redirect', function () {
+
+    /** @var User $user */
+    $user = User::factory()->make();
+
+    allow_authorize('update', $user);
+
+    $request = Request::create('/admin/users/{user}', 'POST', [
+        'name' => 'Mario',
+        'surname' => 'Gattolla',
+        'email' => 'email@libero.it',
+        'role' => 'User',
+        'password' => ' password',
+    ]);
+
+    $response = app(UserController::class)->update($request, $user);
+
+    expect($response)->toBeRedirect();
+
+});
+
+test('user.destroy return redirect', function () {
+
+    /** @var User $user */
+    $user = User::factory()->make();
+
+    allow_authorize('delete', $user);
+
+    $response = app(UserController::class)->destroy($user);
+
+    expect($response)->toBeRedirect();
+});
