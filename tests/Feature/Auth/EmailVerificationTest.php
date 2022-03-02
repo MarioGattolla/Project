@@ -2,13 +2,41 @@
 
 namespace Tests\Feature\Auth;
 
+use App\Http\Controllers\Auth\EmailVerificationNotificationController;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Notification;
+
 use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Auth\Events\Verified;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Notifications\Events\NotificationSent;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
+use function Pest\Laravel\actingAs;
+use function PHPUnit\Framework\assertTrue;
+
+
+//test('email verification notification work', function () {
+//    Notification::fake();
+//
+//    $user = User::factory()->make();
+//
+//    actingAs($user);
+//    $request = Request::create('/register', 'POST',[
+//        'name' => 'Test Name',
+//        'surname' => 'Test Surname',
+//        'role' => 'User',
+//        'email' => 'test@example.com',
+//        'password' => 'password',
+//        'password_confirmation' => 'password',
+//    ]);
+//
+//    $response = app(EmailVerificationNotificationController::class)->store($request);
+//
+//    assertTrue($response);
+//});
 
 class EmailVerificationTest extends TestCase
 {
@@ -43,7 +71,7 @@ class EmailVerificationTest extends TestCase
 
         Event::assertDispatched(Verified::class);
         $this->assertTrue($user->fresh()->hasVerifiedEmail());
-        $response->assertRedirect(RouteServiceProvider::HOME.'?verified=1');
+        $response->assertRedirect(RouteServiceProvider::HOME . '?verified=1');
     }
 
     public function test_email_is_not_verified_with_invalid_hash()

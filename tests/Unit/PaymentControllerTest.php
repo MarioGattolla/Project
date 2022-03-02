@@ -16,7 +16,7 @@ test('payment.show return view', function () {
 
     $response = app(PaymentController::class)->show($payment);
 
-    expect($response)->toBeView('admin.payments.show');
+    expect($response)->toBeView('admin.payments.show', 'payment');
 });
 
 test('payment.index return view', function () {
@@ -36,7 +36,7 @@ test('payments.edit return view', function () {
 
     allow_authorize('update', $payment);
 
-    $response = app(PaymentController::class)->edit($payment);
+    $response = app(PaymentController::class)->edit($payment, 'payment');
 
     expect($response)->toBeView('admin.payments.edit');
 });

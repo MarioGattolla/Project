@@ -16,7 +16,7 @@ test('subscription.show return view', function () {
 
     $response = app(SubscriptionController::class)->show($subscription);
 
-    expect($response)->toBeView('admin.subscriptions.show');
+    expect($response)->toBeView('admin.subscriptions.show', 'subscription');
 });
 
 test('subscription.index return view', function () {
@@ -38,7 +38,7 @@ test('subscription.edit return view', function () {
 
     $response = app(SubscriptionController::class)->edit($subscription);
 
-    expect($response)->toBeView('admin.subscriptions.edit');
+    expect($response)->toBeView('admin.subscriptions.edit', 'subscription');
 });
 
 test('subscription.create return view', function () {

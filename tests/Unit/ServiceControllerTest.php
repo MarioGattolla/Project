@@ -25,7 +25,7 @@ test('service.edit return view', function () {
 
     $response = app(ServiceController::class)->edit($service);
 
-    expect($response)->toBeView('admin.services.edit');
+    expect($response)->toBeView('admin.services.edit', 'service');
 });
 
 test('service.create return view', function () {

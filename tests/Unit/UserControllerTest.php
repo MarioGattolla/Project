@@ -16,7 +16,7 @@ test('user.show return view', function () {
 
     $response = app(UserController::class)->show($user);
 
-    expect($response)->toBeView('admin.users.show');
+    expect($response)->toBeView('admin.users.show', 'user');
 });
 
 test('user.index return view', function () {
@@ -38,7 +38,7 @@ test('user.edit return view', function () {
 
     $response = app(UserController::class)->edit($user);
 
-    expect($response)->toBeView('admin.users.edit');
+    expect($response)->toBeView('admin.users.edit' , 'user');
 });
 
 test('user.create return view', function () {
@@ -60,7 +60,7 @@ test('user.beacoach return view', function () {
 
     $response = app(UserController::class)->be_a_coach($user);
 
-    expect($response)->toBeView('admin.users.beacoach');
+    expect($response)->toBeView('admin.users.beacoach', 'user');
 });
 
 

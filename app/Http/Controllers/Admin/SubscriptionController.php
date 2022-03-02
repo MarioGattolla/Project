@@ -18,8 +18,7 @@ class SubscriptionController extends Controller
     {
         $this->authorize('create', Subscription::class);
 
-        return view('admin.subscriptions.create'
-        );
+        return view('admin.subscriptions.create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -46,8 +45,7 @@ class SubscriptionController extends Controller
     {
         $this->authorize('viewAny', Subscription::class);
 
-        return view('admin.subscriptions.index', [
-        ]);
+        return view('admin.subscriptions.index');
     }
 
     public function show(Subscription $subscription): View

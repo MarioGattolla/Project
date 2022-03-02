@@ -22,11 +22,12 @@ expect()->extend('toBeView', function(string $name, string ...$parameters){
 
     $view = $this->value;
 
+
     /** @var \Illuminate\View\View::class $view */
     expect($view->name())->toBe($name);
 
     if(count($parameters)>0){
-        expect($view->data())->toHaveKeys($parameters);
+        expect($view->getData())->toHaveKeys($parameters);
     }
 });
 
