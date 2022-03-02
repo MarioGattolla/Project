@@ -12,7 +12,7 @@
     <div class="py-12" name="body">
         <x-body-div class="">
             <div class="border-indigo-100 border-2 rounded m-5 p-5" >
-                <form method="POST" action="{{route('beacoachUpdate',$user)}}" class="px-3">
+                <form method="POST" action="{{route('beacoach.update',$user)}}" class="px-3">
                     @csrf
                     @method('PUT')
 

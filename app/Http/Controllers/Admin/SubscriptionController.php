@@ -7,8 +7,6 @@ use App\Http\Controllers\Controller;
 /** @var Subscription[] $subscriptions */
 
 use App\Models\Subscription;
-use App\Models\Service;
-use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -90,7 +88,7 @@ class SubscriptionController extends Controller
 
         $subscription->save();
 
-        return redirect()->route('subscriptions.index')->with('success', 'subscription modified!!');
+        return redirect()->route('subscriptions.show', $subscription)->with('success', 'subscription modified!!');
     }
 
     public function destroy(Subscription $subscription): RedirectResponse

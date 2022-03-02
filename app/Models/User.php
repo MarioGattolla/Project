@@ -154,9 +154,10 @@ class User extends Authenticatable implements MustVerifyEmail
         return $credit - $debit;
     }
 
-    public function show_user_subscribed_services() : Collection
+
+    public function show_user_subscribed_services(): \Illuminate\Support\Collection
     {
-        return $this->subscriptions
+       return $this->subscriptions
             ->flatMap(fn(Subscription $subscription) => $subscription->services->pluck('name'))
             ->unique()
             ->sort();

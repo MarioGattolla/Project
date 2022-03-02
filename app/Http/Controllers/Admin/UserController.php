@@ -115,7 +115,7 @@ class UserController extends Controller
 
         $user->save();
 
-        return redirect()->route('users.show', $user)->with('success', 'You Became a Coach!!');
+        return redirect()->route('users.show', $user)->with('success', 'The User Became a Coach!!');
     }
 
     public function destroy(User $user): RedirectResponse

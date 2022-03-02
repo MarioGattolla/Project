@@ -32,7 +32,7 @@ Route::prefix('admin')->middleware('auth')->group(function () {
 
 });
 Route::get('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach'])->middleware(['auth'])->name('beacoach');
-Route::put('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach_update'])->middleware(['auth'])->name('beacoachUpdate');
+Route::put('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach_update'])->middleware(['auth'])->name('beacoach.update');
 
 
 require __DIR__ . '/auth.php';

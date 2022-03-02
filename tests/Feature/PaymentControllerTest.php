@@ -61,3 +61,48 @@ test('cant see payment.edit page', function ($role) {
 });
 
 
+test('admin can create new payment', function () {
+
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->create();
+
+    $response = $this->actingAs($user)->post('/admin/payments', [
+        'user_id' => $user->id,
+        'date' => '2020-10-10',
+        'quote' => '30',
+    ]);
+
+    expect($response)->toHaveStatus(302)->assertRedirect('/admin/payments');
+});
+
+test('admin can edit payment', function () {
+
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->create();
+
+    /** @var Payment $payment */
+    $payment = Payment::factory()->create();
+
+    $response = $this->actingAs($user)->put(route('payments.update', $payment), [
+        'date' => '2020-10-10',
+        'quote' => '30',
+    ]);
+
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.show', $payment));
+});
+
+test('admin can delete payment', function () {
+
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->create();
+
+    /** @var Payment $payment */
+    $payment = Payment::factory()->create();
+
+    $response = $this->actingAs($user)->delete(route('payments.destroy', $payment));
+
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
+});
+
+
+

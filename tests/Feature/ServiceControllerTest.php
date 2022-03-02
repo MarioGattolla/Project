@@ -48,3 +48,46 @@ test('cant see service.edit page', function ($role) {
 });
 
 
+test('admin can create new service', function () {
+
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->create();
+
+    $response = $this->actingAs($user)->post('/admin/services', [
+        'name' => 'test',
+        'price' => '30',
+    ]);
+
+    expect($response)->toHaveStatus(302)->assertRedirect('/admin/services');
+});
+
+test('admin can edit service', function () {
+
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->create();
+
+    /** @var Service $service */
+    $service = Service::factory()->create();
+
+    $response = $this->actingAs($user)->put(route('services.update', $service), [
+        'name' => 'test',
+        'price' => '30',
+    ]);
+
+    expect($response)->toHaveStatus(302)->assertRedirect(route('services.index'));
+});
+
+test('admin can delete service', function () {
+
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->create();
+
+    /** @var Service $service */
+    $service = Service::factory()->create();
+
+    $response = $this->actingAs($user)->delete(route('services.destroy', $service));
+
+    expect($response)->toHaveStatus(302)->assertRedirect(route('services.index'));
+});
+
+
