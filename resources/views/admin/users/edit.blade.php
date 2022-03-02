@@ -1,7 +1,7 @@
 @php
 
-    /** @var \App\Models\User $user */
-    /** @var string[] $available_roles */
+    /** @var User $user */
+    /** @var string[] $available_roles */use App\Models\User;
 @endphp
 
 <x-app-layout>

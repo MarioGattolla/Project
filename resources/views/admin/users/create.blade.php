@@ -8,7 +8,7 @@
         <x-body-div class="">
             <x-div-box>
                 <x-div-box class="p-2 border-2 border-indigo-100 rounded">
-                <form method="POST" action="/admin/users" class="bg-white p-5 ">
+                <form method="POST" action="{{route('users.index')}}" class="bg-white p-5 ">
                     @csrf
 
                    <x-users.form.label class="" for="name" >Name</x-users.form.label>

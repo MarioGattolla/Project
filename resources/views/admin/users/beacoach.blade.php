@@ -1,6 +1,6 @@
 @php
-    /** @var \App\Models\User $user */
-    /** @var string[] $available_services */
+    /** @var User $user */
+    /** @var string[] $available_services */use App\Models\User;
 @endphp
 
 <x-app-layout>

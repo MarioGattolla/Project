@@ -38,3 +38,13 @@ test('balance return value', function () {
 
     expect($response)->toBeFloat();
 });
+
+test('setPasswordAttribute return void ', function () {
+
+    $user = new User();
+
+    $response = $user->setPasswordAttribute($user->password);
+
+    expect($response)->toBeNull();
+
+});

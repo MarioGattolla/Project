@@ -7,7 +7,7 @@
     <div class="py-12" name="body">
         <x-body-div>
             <x-div-box >
-                <form method="POST" action="/admin/services">
+                <form method="POST" action="{{route('services.index')}}">
                     @csrf
                     <x-div-box class=" border-gray-200 border-2 rounded">
                         <x-users.form.label for="name" class="text-lg">Service Name :</x-users.form.label>

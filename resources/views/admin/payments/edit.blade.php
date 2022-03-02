@@ -1,5 +1,8 @@
 <?php
-/** @var \App\Models\Payment $payment */
+/** @var Payment $payment */
+
+use App\Models\Payment;
+
 ?>
 
 <x-app-layout>
@@ -8,7 +11,7 @@
             {{ __('Edit:  ') }}
         </x-header>
     </x-slot>
-    <div name="body" class="py-12">
+    <div class="py-12">
         <x-body-div>
             <x-div-box class="border-2 border-gray-200 rounded m-3">
                 <form method="POST" action="/admin/payments/{{$payment->id}}" class="bg-white p-5">

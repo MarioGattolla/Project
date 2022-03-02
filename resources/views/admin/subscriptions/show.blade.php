@@ -1,5 +1,8 @@
 <?php
-/** @var \App\Models\Subscription $subscription */
+/** @var Subscription $subscription */
+
+use App\Models\Subscription;
+
 ?>
 
 <x-app-layout>

@@ -8,7 +8,7 @@
         <x-body-div>
             <x-div-box>
 
-                <form method="POST" action="/admin/subscriptions">
+                <form method="POST" action="{{route('subscriptions.index')}}">
                     @csrf
                     <x-div-box class="border-gray-200 border-2 rounded">
 

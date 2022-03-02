@@ -1,7 +1,7 @@
 @php
     use App\Models\Subscription;
     /** @var Subscription[] $subscriptions */
-        $subscriptions = Subscription::paginate(15);
+        $subscriptions = Subscription::orderBy('user_id')->paginate();
 
 @endphp
 

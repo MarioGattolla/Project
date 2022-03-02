@@ -1,5 +1,8 @@
 <?php
-/** @var \App\Models\Service $service**/
+/** @var Service $service**/
+
+use App\Models\Service;
+
 ?>
 
 <x-app-layout>

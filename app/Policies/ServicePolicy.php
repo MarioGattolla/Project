@@ -23,18 +23,6 @@ class ServicePolicy
 
     }
 
-    /**
-     * Determine whether the user can view the model.
-     *
-     * @param  \App\Models\User  $user
-     * @param  \App\Models\Service  $service
-     * @return \Illuminate\Auth\Access\Response|bool
-     */
-    public function view(User $user, Service $service)
-    {
-        return $user->role == Role::admin;
-
-    }
 
     /**
      * Determine whether the user can create models.

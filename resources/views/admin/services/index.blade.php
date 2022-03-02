@@ -1,7 +1,7 @@
 @php
     use App\Models\Service;
     /** @var Service[] $services */
-        $services = Service::all();
+        $services = Service::all()->sortBy->name;
 @endphp
 
 <x-app-layout>
@@ -10,7 +10,7 @@
             {{ __('Services:  ') }}
         </x-header>
     </x-slot>
-    <div name="body" class="py-12">
+    <div class="py-12">
         <x-body-div>
            <a class="m-5 p-3 hover:bg-gray-50 text-lg" href="{{route('services.create')}}" >Create a new Service:</a>
             <x-div-box class="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-1 max gap-4">
@@ -38,7 +38,6 @@
                     </div>
                 @endforeach
             </x-div-box>
-            </div>
         </x-body-div>
     </div>
 

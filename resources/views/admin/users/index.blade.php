@@ -9,7 +9,7 @@ $users = User::paginate(20);
             {{ __('Users') }}
         </h2>
     </x-slot>
-    <div class="py-12" name="body">
+    <div class="py-12">
         <x-body-div>
             <x-div-box>
                 <x-div-box>
