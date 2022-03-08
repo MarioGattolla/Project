@@ -78,7 +78,7 @@ test('user.store return redirect', function () {
 
     $response = app(UserController::class)->store($request);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('users.index'));
 });
 
 
@@ -99,7 +99,7 @@ test('user.update return redirect', function () {
 
     $response = app(UserController::class)->update($request, $user);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('users.show', $user));
 
 });
 
@@ -112,5 +112,5 @@ test('user.destroy return redirect', function () {
 
     $response = app(UserController::class)->destroy($user);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('users.index'));
 });

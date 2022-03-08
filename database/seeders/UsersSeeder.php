@@ -16,9 +16,10 @@ class UsersSeeder extends Seeder
     public function run()
     {
         User::factory()->role(Role::admin)->count(1)->create([
-            'email' => 'admin@palestra.it'
+            'email' => 'mario.gattolla@gmail.com',
+            'password' => 'provaprova',
         ]);
-        User::factory()->role(Role::coach)->withRandomSkills()->count(6)->create();
-        User::factory()->role(Role::user)->withRandomSubscriptions()->withRandomPayments()->count(400)->create();
+        User::factory()->role(Role::coach)->withRandomSkills()->count(10)->create();
+        User::factory()->role(Role::user)->withRandomSubscriptions()->withRandomPayments()->count(1000)->create();
     }
 }

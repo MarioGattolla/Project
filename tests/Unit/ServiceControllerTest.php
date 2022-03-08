@@ -48,7 +48,7 @@ test('service.store return redirect', function () {
 
     $response = app(ServiceController::class)->store($request);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('services.index'));
 });
 
 test('service.update return redirect', function () {
@@ -65,7 +65,7 @@ test('service.update return redirect', function () {
 
     $response = app(ServiceController::class)->update($request, $service);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('services.index'));
 });
 
 test('service.destroy return redirect', function () {
@@ -77,5 +77,5 @@ test('service.destroy return redirect', function () {
 
     $response = app(ServiceController::class)->destroy($service);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('services.index'));
 });

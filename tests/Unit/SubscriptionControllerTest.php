@@ -64,7 +64,7 @@ test('subscription.store return redirect', function () {
 
     $response = app(SubscriptionController::class)->store($request);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('subscriptions.index'));
 });
 
 test('subscription.update return redirect', function () {
@@ -82,7 +82,7 @@ test('subscription.update return redirect', function () {
 
     $response = app(SubscriptionController::class)->update($request, $subscription);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('subscriptions.show',$subscription));
 });
 
 test('subscription.destroy return redirect', function () {
@@ -94,5 +94,5 @@ test('subscription.destroy return redirect', function () {
 
     $response = app(SubscriptionController::class)->destroy($subscription);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('subscriptions.index'));
 });

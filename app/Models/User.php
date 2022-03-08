@@ -157,7 +157,7 @@ class User extends Authenticatable implements MustVerifyEmail
 
     public function show_user_subscribed_services(): \Illuminate\Support\Collection
     {
-       return $this->subscriptions
+        return $this->subscriptions
             ->flatMap(fn(Subscription $subscription) => $subscription->services->pluck('name'))
             ->unique()
             ->sort();
@@ -174,4 +174,25 @@ class User extends Authenticatable implements MustVerifyEmail
             ->get()
             ->map(fn(Subscription $subscription) => $subscription->user);
     }
+
+    public function debtor_count(): int
+    {
+        $users = User::all();
+        $count = 0;
+        foreach ($users as $user) {
+            $debit = $user
+                ->subscriptions
+                ->map(fn(Subscription $subscription) => $subscription->services()->sum('price'))
+                ->sum();
+
+            $credit = $user->payments()->sum('quote');
+
+            if ($credit - $debit < 0)
+            {
+                $count++;
+            }
+        }
+        return $count;
+    }
+
 }

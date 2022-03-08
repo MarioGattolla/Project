@@ -72,7 +72,7 @@ test('cant see user.beacoach page', function ($role) {
 test('admin can create new user', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     $response = $this->actingAs($user)->post('/admin/users', [
         'name' => 'Test',

@@ -63,7 +63,7 @@ test('payment.store return redirect', function () {
 
     $response = app(PaymentController::class)->store($request);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('payments.index'));
 });
 
 test('payment.update return redirect', function () {
@@ -80,7 +80,7 @@ test('payment.update return redirect', function () {
 
     $response = app(PaymentController::class)->update($request, $payment);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('payments.show',$payment));
 });
 
 test('payment.destroy return redirect', function () {
@@ -92,7 +92,7 @@ test('payment.destroy return redirect', function () {
 
     $response = app(PaymentController::class)->destroy( $payment);
 
-    expect($response)->toBeRedirect();
+    expect($response)->toBeRedirect(route('payments.index'));
 });
 
 

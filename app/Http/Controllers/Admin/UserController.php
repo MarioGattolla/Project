@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use function redirect;
 use function view;
+use App\Actions\CreateNewUser;
 
 
 class UserController extends Controller
@@ -75,7 +76,6 @@ class UserController extends Controller
     {
         $this->authorize('create', User::class);
 
-
         $this->validate($request, [
             'name' => 'required',
             'surname' => 'required',
@@ -84,8 +84,8 @@ class UserController extends Controller
             'role' => 'required',
         ]);
 
+        CreateNewUser::make()->handle($request);
 
-        User::create($request->all());
         return redirect()->route('users.index')->with('success', 'User successfully created!!');
     }
 
