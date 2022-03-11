@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\Role;
+use App\Mail\PaymentReminderMail;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Hash;
@@ -18,6 +19,7 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -193,6 +195,12 @@ class User extends Authenticatable implements MustVerifyEmail
             }
         }
         return $count;
+
+    }
+
+    public function payment_remember_mail()
+    {
+        Mail::to('prova@prova.it')->send(new PaymentReminderMail());
     }
 
 }

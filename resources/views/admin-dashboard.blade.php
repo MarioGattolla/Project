@@ -2,7 +2,7 @@
 /** @var User $user */
 
 use App\Models\User;
-
+$debtorsCount = $user->debtor_count();
 ?>
 <x-app-layout>
     <x-slot name="header">
@@ -19,15 +19,16 @@ use App\Models\User;
                     You're logged in , {{$user->name}} {{$user->surname}}
                 </div>
                 <div class="m-3 p-3">
-                    <div class="text-lg mb-3 ">This is the Debtors section, you can ceck Debtors count and send them a quick
-                        email.
+                    <div class="text-lg mb-3 ">This is the Debtors section, you can ceck Debtors count and send them a
+                        quick payment reminder email.
                     </div>
-                    @if($user->debtor_count() >0)
-                        <div> Actually there are {{$user->debtor_count()}} Debtors,</div>
+                    @if($debtorsCount >0)
+                        <div> Actually there are {{$debtorsCount}} Debtors,</div>
                         <div> click on the button to send them email.</div>
-                        <div class="modal rounded-md bg-blue-200 w-20 mt-2" x-data="{ open: false }" >
+                        <div class="modal rounded-md bg-blue-200 w-20 mt-2" x-data="{ open: false }">
                             <button class=" w-full"
-                                    @click="open = true">Send Email</button>
+                                    @click="open = true">Send Email
+                            </button>
                             <div
                                 class=" fixed top-0 left-0 flex items-center justify-center w-full h-full bg-indigo-100"
                                 style="background-color: rgba(0,0,0,.5);" x-show="open">
@@ -38,7 +39,7 @@ use App\Models\User;
                                         <div class="text-lg p-3 m-3 text-gray-900 bg-blue-100">
                                             Actually sending the emails, this can require time.
                                             You can close and wait until a Confirm message appair.
-                                            Dont refresh the page.
+                                            Don't refresh the page.
                                         </div>
                                     </div>
                                     <div class="m-3 p-3">
