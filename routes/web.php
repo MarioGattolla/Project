@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\CoachController;
 use App\Http\Controllers\Admin\PaymentController;
+use App\Http\Controllers\Admin\PaymentReminderController;
 use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
@@ -28,6 +29,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('services', ServiceController::class)->except('show');
     Route::resource('subscriptions', SubscriptionController::class);
+
+    Route::post('payments/send_payment_reminder_emails', [PaymentReminderController::class, 'send_emails'])->name('payments.reminder.send-emails');
     Route::resource('payments', PaymentController::class);
 
 });

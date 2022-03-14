@@ -198,9 +198,4 @@ class User extends Authenticatable implements MustVerifyEmail
 
     }
 
-    public function payment_remember_mail()
-    {
-        Mail::to('prova@prova.it')->send(new PaymentReminderMail());
-    }
-
 }
