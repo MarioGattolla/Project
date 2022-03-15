@@ -15,6 +15,7 @@ class PaymentReminderController extends Controller
     public function send_emails(): JsonResponse
     {
         $users = User::all();
+
         foreach ($users as $user) {
             $debit = $user
                 ->subscriptions
@@ -25,7 +26,7 @@ class PaymentReminderController extends Controller
 
             if ($credit - $debit < 0)
             {
-                Mail::to($user)->queue(new PaymentReminderMail());
+                Mail::to($user)->queue(new PaymentReminderMail($user));
             }
         }
 

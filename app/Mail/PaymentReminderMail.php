@@ -14,13 +14,21 @@ class PaymentReminderMail extends Mailable
     use Queueable, SerializesModels;
 
     /**
+     * The order instance.
+     *
+     * @var User
+     */
+    public User $user;
+
+    /**
      * Create a new message instance.
      *
      * @return void
+     * @param User $user
      */
-    public function __construct()
+    public function __construct(User $user)
     {
-        //
+        $this->user = $user;
     }
 
     /**

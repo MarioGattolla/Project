@@ -14,6 +14,8 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="text-lg p-6 bg-white border-b border-gray-200">
                     Welcome Back, {{$user->name}} {{$user->surname}}
+
+                    Here your actually balance. {{$user->balance()}}
                 </div>
             </div>
         </div>
