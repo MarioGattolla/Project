@@ -7,7 +7,6 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
-use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -34,9 +33,8 @@ Route::prefix('admin')->middleware('auth')->group(function () {
     Route::resource('users', UserController::class);
     Route::resource('services', ServiceController::class)->except('show');
     Route::resource('subscriptions', SubscriptionController::class);
-
-    Route::post('payments/send_payment_reminder_emails', [PaymentReminderController::class, 'send_emails'])->name('payments.reminder.send-emails');
     Route::resource('payments', PaymentController::class);
+    Route::post('payments/send_payment_reminder_emails', [PaymentReminderController::class, 'send_emails'])->name('payments.reminder.send-emails');
 
 });
 Route::get('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach'])->middleware(['auth'])->name('beacoach');

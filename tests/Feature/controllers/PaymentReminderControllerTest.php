@@ -1,16 +1,21 @@
 <?php
 
-use App\Mail\PaymentReminderMail;
+use App\Enums\Role;
+use App\Http\Controllers\Admin\PaymentReminderController;
+use App\Jobs\ProcessDebtorReminderMail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('send_emails can send email',function (){
+test('send_emails can send email to queue', function ()
+{
+    Bus::fake();
 
-    $user = User::factory()->make();
+    User::factory()->role(Role::admin)->create();
 
-    Mail::fake()->to($user)->send(new PaymentReminderMail());
+    app(PaymentReminderController::class)->send_emails();
 
-   Mail::assertSent(PaymentReminderMail::class);
+    Bus::assertDispatchedSync(ProcessDebtorReminderMail::class);
 });
+

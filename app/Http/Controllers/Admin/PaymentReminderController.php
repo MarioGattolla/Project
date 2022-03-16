@@ -3,12 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Mail\PaymentReminderMail;
+use App\Jobs\ProcessDebtorReminderMail;
 use App\Models\Subscription;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
 
 class PaymentReminderController extends Controller
 {
@@ -26,7 +24,8 @@ class PaymentReminderController extends Controller
 
             if ($credit - $debit < 0)
             {
-                Mail::to($user)->queue(new PaymentReminderMail($user));
+                $this->dispatchSync(new ProcessDebtorReminderMail($user));
+
             }
         }
 
