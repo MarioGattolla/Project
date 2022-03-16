@@ -64,21 +64,21 @@ test('cant see payment.edit page', function ($role) {
 test('admin can create new payment', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     $response = $this->actingAs($user)->post('/admin/payments', [
-        'user_id' => $user->id,
+        'user_id' => '1',
         'date' => '2020-10-10',
         'quote' => '30',
     ]);
 
-    expect($response)->toHaveStatus(302)->assertRedirect('/admin/payments');
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
 });
 
 test('admin can edit payment', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     /** @var Payment $payment */
     $payment = Payment::factory()->create();
@@ -94,7 +94,7 @@ test('admin can edit payment', function () {
 test('admin can delete payment', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     /** @var Payment $payment */
     $payment = Payment::factory()->create();

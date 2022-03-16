@@ -51,7 +51,7 @@ test('cant see service.edit page', function ($role) {
 test('admin can create new service', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     $response = $this->actingAs($user)->post('/admin/services', [
         'name' => 'test',
@@ -64,7 +64,7 @@ test('admin can create new service', function () {
 test('admin can edit service', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     /** @var Service $service */
     $service = Service::factory()->create();
@@ -80,7 +80,7 @@ test('admin can edit service', function () {
 test('admin can delete service', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     /** @var Service $service */
     $service = Service::factory()->create();

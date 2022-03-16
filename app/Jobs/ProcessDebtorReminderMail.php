@@ -37,7 +37,6 @@ class ProcessDebtorReminderMail implements ShouldQueue
     /**
      * Execute the job.
      *
-     * @param User $user
      * @return void
      */
     public function handle()

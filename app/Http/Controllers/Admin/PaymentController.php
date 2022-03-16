@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Payments\CreateNewPayment;
+use App\Actions\Payments\DeletePayment;
+use App\Actions\Payments\UpdatePayment;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
-use App\Models\User;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -58,14 +60,7 @@ class PaymentController extends Controller
     {
         $this->authorize('update', $payment);
 
-
-        $this->validate($request, [
-
-        ]);
-
-        $payment->fill($request->all());
-
-        $payment->save();
+        UpdatePayment::make()->handle($request, $payment);
 
         return redirect()->route('payments.show', $payment)->with('success', 'Payment successfully modified!!');
     }
@@ -89,13 +84,12 @@ class PaymentController extends Controller
         $this->authorize('create', Payment::class);
 
         $this->validate($request, [
-            'user_id'=>'required',
-            'quote'=>'required',
-            'date'=>'required|date',
+            'user_id' => 'required',
+            'quote' => 'required',
+            'date' => 'required|date',
         ]);
 
-        Payment::create($request->all());
-
+        CreateNewPayment::make()->handle($request);
 
         return redirect()->route('payments.index')->with('success', 'Payment successfully created!!');
     }
@@ -107,7 +101,8 @@ class PaymentController extends Controller
     {
         $this->authorize('delete', $payment);
 
-        $payment->delete();
+        DeletePayment::make()->handle($payment);
+
         return redirect()->route('payments.index')->with('success', 'Payment successfully deleted!!');
     }
 

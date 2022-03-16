@@ -65,7 +65,7 @@ test('cant see subscription.edit page', function ($role) {
 test('admin can create new subscription', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     $response = $this->actingAs($user)->post('/admin/subscriptions', [
         'user_id' => User::factory()->create()->id,
@@ -80,7 +80,7 @@ test('admin can create new subscription', function () {
 test('admin can edit subscription', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     /** @var Subscription $subscriptions */
     $subscriptions = Subscription::factory()->create();
@@ -97,7 +97,7 @@ test('admin can edit subscription', function () {
 test('admin can delete subscription', function () {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::admin)->make();
 
     /** @var Subscription $subscriptions */
     $subscriptions = Subscription::factory()->create();

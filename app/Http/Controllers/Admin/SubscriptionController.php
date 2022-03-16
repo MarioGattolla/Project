@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Subscriptions\CreateNewSubscription;
+use App\Actions\Subscriptions\DeleteSubscription;
+use App\Actions\Subscriptions\UpdateSubscription;
 use App\Http\Controllers\Controller;
 
 /** @var Subscription[] $subscriptions */
@@ -23,7 +26,6 @@ class SubscriptionController extends Controller
 
     public function store(Request $request): RedirectResponse
     {
-//        dd($request);
         $this->authorize('create', Subscription::class);
 
         $this->validate($request, [
@@ -32,11 +34,7 @@ class SubscriptionController extends Controller
             'end' => 'required|date|after:start',
         ]);
 
-        $subscription = Subscription::create($request->all());
-
-        $subscribed_services = $request->input('services', []);
-
-        $subscription->services()->sync($subscribed_services);
+        CreateNewSubscription::make()->handle($request);
 
         return redirect()->route('subscriptions.index')->with('success', 'Subscription created !!');
     }
@@ -76,15 +74,7 @@ class SubscriptionController extends Controller
             'end' => 'required|date|after:start',
         ]);
 
-
-
-        $subscribed_services = $request->input('services', []);
-
-        $subscription->services()->sync($subscribed_services);
-
-        $subscription->fill($request->all());
-
-        $subscription->save();
+        UpdateSubscription::make()->handle($request, $subscription);
 
         return redirect()->route('subscriptions.show', $subscription)->with('success', 'subscription modified!!');
     }
@@ -94,7 +84,8 @@ class SubscriptionController extends Controller
 
         $this->authorize('delete', $subscription);
 
-        $subscription->delete();
+        DeleteSubscription::make()->handle($subscription);
+
         return redirect()->route('subscriptions.index')->with('success', 'subscription deleted!!');
     }
 

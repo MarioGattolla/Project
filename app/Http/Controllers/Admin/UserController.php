@@ -3,6 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 
+use App\Actions\Users\CreateNewUser;
+use App\Actions\Users\DeleteUser;
+use App\Actions\Users\UpdateUser;
+use App\Actions\Users\UserBeACoachUpdate;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -10,7 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use function redirect;
 use function view;
-use App\Actions\CreateNewUser;
 
 
 class UserController extends Controller
@@ -58,9 +61,7 @@ class UserController extends Controller
         ]);
 
 
-        $user->fill($request->all());
-
-        $user->save();
+        UpdateUser::make()->handle($request, $user);
 
         return redirect()->route('users.show', $user)->with('success', 'User successfully updated !!');
     }
@@ -105,14 +106,7 @@ class UserController extends Controller
             'services' => ' required',
         ]);
 
-        $services = $request->input('services', []);
-
-        $user->skill()->sync($services);
-
-        $user->role = 'Coach';
-        $user->fill($request->all());
-
-        $user->save();
+        UserBeACoachUpdate::make()->handle($request, $user);
 
         return redirect()->route('users.show', $user)->with('success', 'The User Became a Coach!!');
     }
@@ -121,7 +115,8 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        $user->delete();
+        DeleteUser::make()->handle($user);
+
         return redirect()->route('users.index')->with('success', 'User successfully deleted!!');
     }
 

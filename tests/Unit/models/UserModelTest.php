@@ -48,3 +48,10 @@ test('setPasswordAttribute return void ', function () {
     expect($response)->toBeNull();
 
 });
+
+test('debtors_count return int value', function () {
+
+    $response = app(User::class)->debtor_count();
+
+    expect($response)->toBeInt();
+});

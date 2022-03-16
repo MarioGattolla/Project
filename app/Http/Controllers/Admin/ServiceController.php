@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Actions\Services\CreateNewService;
+use App\Actions\Services\DeleteService;
+use App\Actions\Services\UpdateService;
 use App\Http\Controllers\Controller;
 
 /** @var Service[] $services */
@@ -39,7 +42,8 @@ class ServiceController extends Controller
             'price' => 'required',
         ]);
 
-        Service::create($request->all());
+        CreateNewService::make()->handle($request);
+
         return redirect()->route('services.index')->with('success', 'Service successfully created !!');
     }
 
@@ -78,9 +82,7 @@ class ServiceController extends Controller
             'price' => 'required',
         ]);
 
-        $service->fill($request->all());
-
-        $service->save();
+        UpdateService::make()->handle($request, $service);
 
         return redirect()->route('services.index')->with('success', 'Service successfully modified!!');
     }
@@ -92,7 +94,8 @@ class ServiceController extends Controller
     {
         $this->authorize('delete', $service);
 
-        $service->delete();
+        DeleteService::make()->handle($service);
+
         return redirect()->route('services.index')->with('success', 'Service successfully deleted!!');
     }
 }
