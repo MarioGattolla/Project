@@ -27,7 +27,7 @@ test('send_emails can queue mail', function () {
     app(PaymentReminderController::class)->send_emails();
 
     Bus::assertDispatched(ProcessDebtorReminderMail::class, function (ProcessDebtorReminderMail $mail) use ($debtor) {
-        expect($mail->user->getAttributeValue('id')) == $debtor->id;
+        return $mail->user->id == $debtor->id;
     });
-})->only();
+});
 
