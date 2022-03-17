@@ -10,7 +10,7 @@ class UpdateUser
 {
     use ActsAsAction;
 
-    public function handle(Request $request , User $user)
+    public function handle(Request $request , User $user): bool
     {
         $user -> fill($request->all());
         return $user->save();

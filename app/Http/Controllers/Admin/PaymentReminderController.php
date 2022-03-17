@@ -24,12 +24,10 @@ class PaymentReminderController extends Controller
 
             if ($credit - $debit < 0)
             {
-                $this->dispatchSync(new ProcessDebtorReminderMail($user));
 
+                $this->dispatch(new ProcessDebtorReminderMail($user));
             }
         }
-
-
 
         return response()->json([
             'ok' => true,
