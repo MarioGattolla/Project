@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use App\Enums\Role;
-use App\Mail\PaymentReminderMail;
 use Database\Factories\UserFactory;
 use Eloquent;
 use Hash;
@@ -19,7 +18,6 @@ use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Notifications\DatabaseNotificationCollection;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Mail;
 use Laravel\Sanctum\HasApiTokens;
 use Laravel\Sanctum\PersonalAccessToken;
 
@@ -67,6 +65,9 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property-read Collection|Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
  * @method static Builder|User whereSurname($value)
+ * @property Role $role
+ * @property-read Collection|Service[] $skill
+ * @property-read int|null $skill_count
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -106,10 +107,7 @@ class User extends Authenticatable implements MustVerifyEmail
         'email_verified_at' => 'datetime',
         'role' => Role::class
     ];
-    /**
-     * @var mixed|string
-     */
-    private mixed $role;
+
 
     public function setPasswordAttribute(string|null $plaintext_password): void
     {
@@ -143,21 +141,13 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->belongsToMany(Service::class, 'skill', 'user_id', 'service_id');
     }
 
-    public function balance(User $user): float
+    public function balance(): float
     {
-
-        $debit = $user
-            ->subscriptions
-            ->map(fn(Subscription $subscription) => $subscription->services()->sum('price'))
-            ->sum();
-
-        $credit = $user->payments()->sum('quote');
-
-        return $credit - $debit;
+        return $this->get_total_paid() - $this->get_total_dued();
     }
 
 
-    public function show_user_subscribed_services(): \Illuminate\Support\Collection
+    public function subscribed_services(): \Illuminate\Support\Collection
     {
         return $this->subscriptions
             ->flatMap(fn(Subscription $subscription) => $subscription->services->pluck('name'))
@@ -168,34 +158,42 @@ class User extends Authenticatable implements MustVerifyEmail
     /**
      * @return Collection<User>
      */
-    public function show_users_coached_list_for_skill($skill): Collection
+    public static function get_subscribed_users_by_skill(string $skill): Collection
     {
-        return Subscription::query()
+        return Subscription::query()/** @phpstan-ignore-line  */
             ->whereRelation('services', 'name', $skill)
             ->with('user.subscriptions.services')
             ->get()
-            ->map(fn(Subscription $subscription) => $subscription->user);
+            ->map(fn(Subscription $subscription) => $subscription->user)/** @phpstan-ignore-line  */
+            ->filter();
     }
 
-    public function debtor_count(): int
+    public static function debtors_count(): int
     {
-        $users = User::all();
-        $count = 0;
-        foreach ($users as $user) {
-            $debit = $user
-                ->subscriptions
-                ->map(fn(Subscription $subscription) => $subscription->services()->sum('price'))
-                ->sum();
+        return User::all()
+            ->filter(fn(User $user) => $user->is_debtor())
+            ->count();
+    }
 
-            $credit = $user->payments()->sum('quote');
 
-            if ($credit - $debit < 0)
-            {
-                $count++;
-            }
-        }
-        return $count;
+    public function is_debtor(): bool
+    {
+        return $this->balance() < 0;
+    }
 
+
+    public function get_total_dued(): float
+    {
+        return $this
+            ->subscriptions
+            ->map(fn(Subscription $subscription) => $subscription->services()->sum('price'))
+            ->sum();
+    }
+
+
+    public function get_total_paid(): float
+    {
+        return $this->payments()->sum('quote');
     }
 
 }

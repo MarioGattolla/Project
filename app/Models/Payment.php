@@ -34,6 +34,7 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Payment whereSubscriptionId($value)
  * @method static Builder|Payment whereQuote($value)
  * @method static Builder|Payment whereUserId($value)
+ * @method static \Database\Factories\PaymentFactory factory(...$parameters)
  */
 
 class Payment extends Model

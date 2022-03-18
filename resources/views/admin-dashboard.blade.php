@@ -3,7 +3,7 @@
 
 use App\Models\User;
 
-$debtorsCount = $user->debtor_count();
+$debtorsCount = User::debtors_count();
 ?>
 <x-app-layout>
     <x-slot name="header">

@@ -8,45 +8,27 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 
-test('setPasswordAttribute hash password attribute', function () {
-
-    $user = new User();
-
-    app(User::class)->setPasswordAttribute($user->password);
-
-    expect($user->password)->not->toBe('password');
-});
-
-test('debtors_count count debtors >0', function () {
-
+test('debtors_count count debtors', function ($debtors, $good_users, $expected_count) {
     Service::factory()->count(3)->create();
 
-    $debtors = User::factory()->count(3)
-        ->withRandomSubscriptions()
-        ->create();
 
-    $good_user = User::factory()
-        ->withRandomPayments()
-        ->create();
+    $debtors && User::factory()->count($debtors)->withRandomSubscriptions()->create();
 
-    $result = app(User::class)->debtor_count();
+    $good_users && User::factory()->count($good_users)->withRandomPayments()->create();
 
-    expect($result)->toBe(3);
-});
 
-test('debtors_count count debtors =0', function () {
+    $result = User::debtors_count();
 
-    Service::factory()->count(3)->create();
-
-    $debtors = User::factory()->count(0)
-        ->withRandomSubscriptions()
-        ->create();
-
-    $good_user = User::factory(3)
-        ->withRandomPayments()
-        ->create();
-
-    $result = app(User::class)->debtor_count();
-
-    expect($result)->toBe(0);
-});
+    expect($result)->toBe($expected_count);
+})->with([
+    '3 debtors' => [
+        'debtors' => 3,
+        'good_users' => 1,
+        'expected_count' => 3
+    ],
+    'no debtors' => [
+        'debtors' => 0,
+        'good_users' => 1,
+        'expected_count' => 0
+    ],
+]);

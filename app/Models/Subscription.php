@@ -43,6 +43,7 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $payments_count
  * @property-read Collection|Service[] $services
  * @property-read int|null $services_count
+ * @method static \Database\Factories\SubscriptionFactory factory(...$parameters)
  */
 class Subscription extends Model
 {

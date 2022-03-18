@@ -11,7 +11,8 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "laravel/framework": "^8.65",
         "laravel/sanctum": "^2.11",
-        "laravel/tinker": "^2.5"
+        "laravel/tinker": "^2.5",
+        "ext-http": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^2.10",
@@ -23,8 +24,10 @@
         "laravel/telescope": "^4.6",
         "mockery/mockery": "^1.4.4",
         "nunomaduro/collision": "^5.10",
+        "nunomaduro/larastan": "^v1.0",
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.2",
+        "pestphp/pest-plugin-parallel": "^1.0",
         "phpunit/phpunit": "^9.5.10"
     },
     "autoload": {
@@ -52,6 +55,12 @@
         ],
         "post-create-project-cmd": [
             "@php artisan key:generate --ansi"
+        ],
+        "test:types": "php vendor/bin/phpstan analyse --ansi --memory-limit=-1",
+        "test": "php vendor/bin/pest --colors=always --parallel",
+        "test:all": [
+            "@test:types",
+            "@test"
         ]
     },
     "extra": {

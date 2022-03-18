@@ -33,6 +33,9 @@ use Illuminate\Support\Carbon;
  * @property-read int|null $coaches_count
  * @property-read Collection|Subscription[] $subscriptions
  * @property-read int|null $subscriptions_count
+ * @property-read Collection|\App\Models\User[] $skill
+ * @property-read int|null $skill_count
+ * @method static \Database\Factories\ServiceFactory factory(...$parameters)
  */
 
 class Service extends Model

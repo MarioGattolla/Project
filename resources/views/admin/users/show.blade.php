@@ -21,7 +21,7 @@
                     <x-users.form.label> User Surname : {{$user->surname}}</x-users.form.label>
                     <x-users.form.label> Role : {{$user->role->value}}</x-users.form.label>
                     <x-users.form.label> User Email : {{$user->email}}</x-users.form.label>
-                    <x-users.form.label> User Balance : €{{$user->balance($user)}}</x-users.form.label>
+                    <x-users.form.label> User Balance : €{{$user->balance()}}</x-users.form.label>
                     @if($user->role->value == 'Coach')
                         <x-users.form.label for="" class="text-lg">Services :</x-users.form.label>
                         @foreach($user->skill()->pluck('name', 'service_id') as $skill)

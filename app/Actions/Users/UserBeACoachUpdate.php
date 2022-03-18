@@ -2,6 +2,7 @@
 
 namespace App\Actions\Users;
 
+use App\Enums\Role;
 use App\Models\User;
 use DefStudio\Actions\Concerns\ActsAsAction;
 use Illuminate\Http\Request;
@@ -18,7 +19,7 @@ class UserBeACoachUpdate
 
         $user->skill()->sync($services);
 
-        $user->role = 'Coach';
+        $user->role = Role::coach;
         $user->fill($request->all());
 
         return $user->save();
