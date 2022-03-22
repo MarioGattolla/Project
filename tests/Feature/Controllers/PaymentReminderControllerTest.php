@@ -24,7 +24,7 @@ test('send_emails can queue mail', function () {
         ->withRandomSubscriptions()
         ->create();
 
-    app(PaymentReminderController::class)->send_emails();
+    app(PaymentReminderController::class)->send_debit_reminder_emails();
 
     Bus::assertDispatched(ProcessDebtorReminderMail::class, function (ProcessDebtorReminderMail $mail) use ($debtor) {
         return $mail->user->id == $debtor->id;

@@ -7,7 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 uses(RefreshDatabase::class);
 
 test('send_emails return json', function (){
-    $response = app(PaymentReminderController::class)->send_emails();
+    $response = app(PaymentReminderController::class)->send_debit_reminder_emails();
     expect($response)->toHaveJson([
         'ok' => true,
         'message' => 'email inviate',]);

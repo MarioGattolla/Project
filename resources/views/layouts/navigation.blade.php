@@ -27,12 +27,16 @@
 
             <!-- Navigation Bar Subscription -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
-                <a href="{{route('subscriptions.index')}}">Subscriptions</a>
+                <a href="{{route('subscriptions.index',[
+    'user' => Auth::user(),
+])}}">Subscriptions</a>
             </div>
 
             <!-- Navigation Bar Payments -->
             <div class="hidden sm:flex sm:items-center sm:ml-6 ">
-                <a href="{{route('payments.index')}}">Payments</a>
+                <a href="{{route('payments.index',[
+    'user' => Auth::user(),
+])}}">Payments</a>
             </div>
 
             <!-- Navigation Bar Services -->

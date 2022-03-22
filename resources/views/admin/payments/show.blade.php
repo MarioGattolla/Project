@@ -2,7 +2,9 @@
 /** @var Payment $payment */
 
 use App\Models\Payment;
+use App\Models\User;
 
+/** @var User $user */
 ?>
 
 <x-app-layout>
@@ -34,11 +36,11 @@ use App\Models\Payment;
 
                     </div>
                 </div>
-                <x-button class="mt-3 mb-3"><a href="{{route('payments.edit', $payment)}}">Edit</a></x-button>
+                <x-button class="mt-3 mb-3"><a href="{{route('payments.edit',[$user, $payment])}}">Edit</a></x-button>
                 <form method="POST">
                     @csrf
-                    @method('DELETE')
-                    <x-button>Delete</x-button>
+                    @method('DELETE' )
+                    <x-button >Delete</x-button>
                 </form>
             </x-div-box>
         </x-body-div>

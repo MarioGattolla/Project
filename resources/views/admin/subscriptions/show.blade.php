@@ -2,7 +2,9 @@
 /** @var Subscription $subscription */
 
 use App\Models\Subscription;
+use App\Models\User;
 
+/** @var User $user */
 ?>
 
 <x-app-layout>
@@ -40,7 +42,7 @@ use App\Models\Subscription;
                         : {{$subscription->end->format('Y-m-d')}}</x-users.form.label>
                 </div>
     </div>
-    <x-button href="{{route('subscriptions.edit',$subscription)}}">Edit</x-button>
+    <x-button href="{{route('subscriptions.edit',[$user ,$subscription])}}">Edit</x-button>
 
     <form method="POST">
         @csrf

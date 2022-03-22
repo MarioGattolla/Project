@@ -3,6 +3,8 @@
     /** @var Subscription[] $subscriptions */
         $subscriptions = Subscription::orderBy('user_id')->paginate();
 
+        /** @var \App\Models\User $user */
+
 @endphp
 
 <x-app-layout>
@@ -14,7 +16,7 @@
     <div class="py-12">
         <x-body-div>
             <div class="p-3 m-3">
-                <a href="{{route('subscriptions.create')}}" class="text-xl">Create a new Subscription</a>
+                <a href="{{route('subscriptions.create', $user)}}" class="text-xl">Create a new Subscription</a>
             </div>
             <div class="grid lg:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 p-3 gap-4">
                 @foreach($subscriptions as $subscription)
@@ -27,7 +29,7 @@
                             <div class=" ">Incription End
                                 : {{$subscription->end->format('Y-m-d')}}</div>
                         </div>
-                        <x-button href="{{route('subscriptions.show',$subscription)}}">Show</x-button>
+                        <x-button href="{{route('subscriptions.show', [$user, $subscription])}}">Show</x-button>
 
                     </div>
                 @endforeach

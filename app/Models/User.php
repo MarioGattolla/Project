@@ -68,6 +68,7 @@ use Laravel\Sanctum\PersonalAccessToken;
  * @property Role $role
  * @property-read Collection|Service[] $skill
  * @property-read int|null $skill_count
+ * @method static Builder|User subscribedTo(string $skill)
  */
 class User extends Authenticatable implements MustVerifyEmail
 {
@@ -194,6 +195,13 @@ class User extends Authenticatable implements MustVerifyEmail
     public function get_total_paid(): float
     {
         return $this->payments()->sum('quote');
+    }
+
+    public function subscribedToScope(Builder $query, string $skill): void
+    {
+        $query->whereHas('subscription', function (Builder $subquery) use ($skill) {
+            $subquery->whereRelation('services', 'name', $skill);
+        });
     }
 
 }

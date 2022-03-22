@@ -21,7 +21,7 @@
                     <div class="m-3">
                         <li class="p-3 m-3 bg-indigo-100 border-2 rounded-md text-lg">{{$skill}}</li>
                         <div class="grid grid-cols-6">
-                            @foreach(\App\Models\User::get_subscribed_users_by_skill($skill ) as $coached_user)
+                            @foreach(\App\Models\User::subscribedTo($skill)->get() as $coached_user)
                                 <?php /** @var \App\Models\User $coached_user */ ?>
                                 <div class="modal col-span-1 border-2 bg-gray-50 m-2" x-data="{ open: false }">
                                     <button class=" w-full"

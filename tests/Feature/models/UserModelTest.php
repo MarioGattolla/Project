@@ -32,3 +32,15 @@ test('debtors_count count debtors', function ($debtors, $good_users, $expected_c
         'expected_count' => 0
     ],
 ]);
+
+test('subscribed to scope', function () {
+    /** @var Service $services */
+    $service = Service::factory()->create();
+
+    /** @var User $user */
+    $user = User::factory()->withRandomSubscriptions()->create();
+
+    $response = User::get_subscribed_users_by_skill($service);
+
+    expect($response)->toBeCollection();
+});

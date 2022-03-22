@@ -3,20 +3,25 @@
 namespace App\Actions\Subscriptions;
 
 use App\Models\Subscription;
+use App\Models\User;
+use Carbon\Carbon;
+use Carbon\CarbonInterface;
 use DefStudio\Actions\Concerns\ActsAsAction;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Http\Request;
 
+/**
+ * @method static Subscription run(User $user, CarbonInterface $start, CarbonInterface $end, array $subscribed_services)
+ */
 class CreateNewSubscription
 {
     use ActsAsAction;
 
-    public function handle(Request $request): Model|Subscription
+    public function handle(User $user, Carbon $start, Carbon $end, array $subscribed_services): Model|Subscription
     {
-        $subscription = Subscription::create($request->all());
-        Subscription::create($request->all());
-
-        $subscribed_services = $request->input('services', []);
+        $subscription = $user->subscriptions()->create([
+            'start' => $start,
+            'end' => $end,
+        ]);
 
         $subscription->services()->sync($subscribed_services);
 

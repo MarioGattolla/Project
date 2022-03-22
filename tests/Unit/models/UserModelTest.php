@@ -2,6 +2,7 @@
 
 use App\Models\User;
 use App\Models\Service;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 
@@ -17,13 +18,6 @@ test('show_user_subscribed_services return collection', function () {
     expect($response)->toBeCollection();
 });
 
-test('how_users_coached_list_for_skill return collection', function () {
-    /** @var Service $skill */
-    $skill = Service::factory()->make();
-    $response = User::get_subscribed_users_by_skill($skill);
-
-    expect($response)->toBeCollection();
-});
 
 test('balance return value', function () {
 

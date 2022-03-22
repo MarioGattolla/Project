@@ -1,7 +1,16 @@
 @php
-    use App\Models\Payment;
+    use App\Models\Payment;use App\Models\User;
     /** @var Payment[] $payments */
-        $payments = Payment::orderBy('user_id')->paginate();
+
+
+/** @var User $user */
+
+if ($user->role = 'Admin'){
+    $payments = Payment::orderBy('user_id')->paginate();
+}
+else{
+    $payments = Payment::whereRelation('user','user_id',$user->id)->paginate();
+}
 
 @endphp
 
@@ -15,7 +24,7 @@
 
         <x-body-div class="m-3 p-3">
             <div class="m-3 p-3">
-                <a href="{{route('payments.create')}}" class="text-xl m-3 p-3  ">Create a new Payment</a>
+                <a href="{{route('payments.create', $user)}}" class="text-xl m-3 p-3  ">Create a new Payment</a>
             </div>
             <div class="grid xl:grid-cols-6 md:grid-cols-4 sm:grid-cols-2 gap-4 m-3 p-3 ">
                 @foreach($payments as $payment)
@@ -26,7 +35,7 @@
                             <div>Payment Quote : €{{$payment->quote}}</div>
                             <div>Payment Date : {{$payment->date->format('Y-m-d')}}</div>
                         </div>
-                        <x-button class="m-3" type="button" href="{{route('payments.show',$payment)}}">Show
+                        <x-button class="m-3" type="button" href="{{route('payments.show', [$user,$payment])}}">Show
                         </x-button>
                     </div>
                 @endforeach

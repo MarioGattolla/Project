@@ -15,7 +15,7 @@ test('Reminder Mail Job can send email', closure: function () {
 
     $user = User::factory()->withRandomSubscriptions()->create();
 
-    $response = app(\App\Http\Controllers\Admin\PaymentReminderController::class)->send_emails();
+    $response = app(\App\Http\Controllers\Admin\PaymentReminderController::class)->send_debit_reminder_emails();
 
     Mail::assertSent(PaymentReminderMail::class, function (PaymentReminderMail $mail) use ($user) {
         return $mail->user->email == $user->email;
