@@ -8,6 +8,7 @@ use App\Actions\Payments\UpdatePayment;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\User;
+use Carbon\Carbon;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -17,6 +18,17 @@ use Illuminate\View\View;
 /** @var Payment[] $payments */
 class PaymentController extends Controller
 {
+    /**
+     * @throws AuthorizationException
+     */
+    public function index(User $user): View
+    {
+        return view('admin.payments.index', [
+            'user' => $user,
+        ]);
+
+    }
+
     /**
      * @throws AuthorizationException
      */
@@ -33,15 +45,33 @@ class PaymentController extends Controller
     /**
      * @throws AuthorizationException
      */
-    public function index(User $user): View
+    public function create(User $user): View
     {
-        $this->authorize('viewAny', Payment::class);
-
-        return view('admin.payments.index', [
+        return view('admin.payments.create', [
             'user' => $user,
         ]);
-
     }
+
+    /**
+     * @throws AuthorizationException
+     * @throws ValidationException
+     */
+    public function store(Request $request, User $user): RedirectResponse
+    {
+
+        $this->validate($request, [
+            'quote' => 'required',
+            'date' => 'required|date',
+        ]);
+
+        $quote = $request->input('quote');
+        $date = Carbon::make($request->input('date'));
+
+        CreateNewPayment::run($user, $quote, $date);
+
+        return redirect()->route('payments.index', $user)->with('success', 'Payment successfully created!!');
+    }
+
 
     /**
      * @throws AuthorizationException
@@ -65,41 +95,19 @@ class PaymentController extends Controller
     {
         $this->authorize('update', $payment);
 
-        UpdatePayment::make()->handle($request, $payment);
-
-        return redirect()->route('payments.show', [$user, $payment])->with('success', 'Payment successfully modified!!');
-    }
-
-    /**
-     * @throws AuthorizationException
-     */
-    public function create(User $user): View
-    {
-        $this->authorize('create', Payment::class);
-
-        return view('admin.payments.create', [
-            'user' => $user,
-        ]);
-    }
-
-    /**
-     * @throws AuthorizationException
-     * @throws ValidationException
-     */
-    public function store(Request $request , User $user): RedirectResponse
-    {
-        $this->authorize('create', Payment::class);
-
         $this->validate($request, [
-            'user_id' => 'required',
             'quote' => 'required',
             'date' => 'required|date',
         ]);
 
-        CreateNewPayment::make()->handle($request);
+        $quote = $request->input('quote');
+        $date = Carbon::make($request->input('date'));
 
-        return redirect()->route('payments.index', $user)->with('success', 'Payment successfully created!!');
+        UpdatePayment::run($user, $quote, $date , $payment);
+
+        return redirect()->route('payments.show', [$user, $payment])->with('success', 'Payment successfully modified!!');
     }
+
 
     /**
      * @throws AuthorizationException
@@ -108,7 +116,7 @@ class PaymentController extends Controller
     {
         $this->authorize('delete', $payment);
 
-        DeletePayment::make()->handle($payment);
+        DeletePayment::run($payment);
 
         return redirect()->route('payments.index', $user)->with('success', 'Payment successfully deleted!!');
     }

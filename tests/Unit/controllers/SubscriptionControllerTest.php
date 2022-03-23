@@ -29,8 +29,6 @@ test('subscription.index return view', function () {
     /** @var User $user */
     $user = User::factory()->make();
 
-    allow_authorize('viewAny', Subscription::class);
-
     $response = app(SubscriptionController::class)->index($user);
 
     expect($response)->toBeView('admin.subscriptions.index');
@@ -55,8 +53,6 @@ test('subscription.create return view', function () {
 
     /** @var User $user */
     $user = User::factory()->make();
-
-    allow_authorize('create', Subscription::class);
 
     $response = app(SubscriptionController::class)->create($user);
 

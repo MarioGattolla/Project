@@ -28,8 +28,6 @@ test('payment.index return view', function () {
     /** @var User $user */
     $user = User::factory()->make();
 
-    allow_authorize('viewAny', Payment::class);
-
     $response = app(PaymentController::class)->index($user);
 
     expect($response)->toBeView('admin.payments.index');
@@ -54,8 +52,6 @@ test('payment.create return view', function () {
 
     /** @var User $user */
     $user = User::factory()->make();
-
-    allow_authorize('create', Payment::class);
 
     $response = app(PaymentController::class)->create($user);
 

@@ -21,17 +21,23 @@ class SubscriptionController extends Controller
     public function index(User $user): View
 
     {
-        $this->authorize('viewAny', Subscription::class);
-
         return view('admin.subscriptions.index', [
+            'user' => $user,
+        ]);
+    }
+
+    public function show(User $user, Subscription $subscription): View
+    {
+        $this->authorize('view', $subscription);
+
+        return view('admin.subscriptions.show', [
+            'subscription' => $subscription,
             'user' => $user,
         ]);
     }
 
     public function create(User $user): View
     {
-        $this->authorize('create', Subscription::class);
-
         return view('admin.subscriptions.create', [
             'user' => $user
         ]);
@@ -39,7 +45,6 @@ class SubscriptionController extends Controller
 
     public function store(Request $request, User $user): RedirectResponse
     {
-        $this->authorize('create', Subscription::class);
 
         $this->validate($request, [
             'user_id' => 'required|exists:users,id',
@@ -61,23 +66,13 @@ class SubscriptionController extends Controller
     }
 
 
-    public function show(User $user, Subscription $subscription): View
-    {
-        $this->authorize('view', $subscription);
-
-        return view('admin.subscriptions.show', [
-            'subscription' => $subscription,
-            'user' => $user,
-        ]);
-    }
-
     public function edit(User $user, Subscription $subscription): View
     {
         $this->authorize('update', $subscription);
 
         return view('admin.subscriptions.edit', [
             'subscription' => $subscription,
-            'user' => $user
+            'user' => $user,
         ]);
     }
 
@@ -89,9 +84,17 @@ class SubscriptionController extends Controller
         $this->validate($request, [
             'start' => 'required|date',
             'end' => 'required|date|after:start',
+            'services' => 'array|required',
+            'services.*' => 'int|exists:services,id',
         ]);
 
-        UpdateSubscription::make()->handle($request, $subscription);
+        $start = Carbon::make($request->input('start'));
+
+        $end = Carbon::make($request->input('end'));
+
+        $services = $request->input('services');
+
+        UpdateSubscription::run($user, $start, $end, $subscription, $services);
 
         return redirect()->route('subscriptions.show', [$user, $subscription])->with('success', 'subscription modified!!');
     }
@@ -101,7 +104,7 @@ class SubscriptionController extends Controller
 
         $this->authorize('delete', $subscription);
 
-        DeleteSubscription::make()->handle($subscription);
+        DeleteSubscription::run($subscription);
 
         return redirect()->route('subscriptions.index', $user)->with('success', 'subscription deleted!!');
     }

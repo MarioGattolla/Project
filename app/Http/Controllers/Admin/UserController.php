@@ -61,7 +61,7 @@ class UserController extends Controller
         ]);
 
 
-        UpdateUser::make()->handle($request, $user);
+        UpdateUser::run($request, $user);
 
         return redirect()->route('users.show', $user)->with('success', 'User successfully updated !!');
     }
@@ -85,7 +85,7 @@ class UserController extends Controller
             'role' => 'required',
         ]);
 
-        CreateNewUser::make()->handle($request);
+        CreateNewUser::run($request);
 
         return redirect()->route('users.index')->with('success', 'User successfully created!!');
     }
@@ -106,7 +106,7 @@ class UserController extends Controller
             'services' => ' required',
         ]);
 
-        UserBeACoachUpdate::make()->handle($request, $user);
+        UserBeACoachUpdate::run($request, $user);
 
         return redirect()->route('users.show', $user)->with('success', 'The User Became a Coach!!');
     }
@@ -115,7 +115,7 @@ class UserController extends Controller
     {
         $this->authorize('delete', $user);
 
-        DeleteUser::make()->handle($user);
+        DeleteUser::run($user);
 
         return redirect()->route('users.index')->with('success', 'User successfully deleted!!');
     }

@@ -1,7 +1,8 @@
 <?php
 /** @var Subscription $subscription */
-
+/** @var User $user */
 use App\Models\Subscription;
+use App\Models\User;
 
 ?>
 
@@ -14,7 +15,7 @@ use App\Models\Subscription;
     <div name="body" class="py-12">
         <x-body-div>
             <x-div-box class="border-2 border-gray-200 rounded">
-                <form method="POST" action="/admin/subscriptions/{{$subscription->id}}" class="bg-white p-5">
+                <form method="POST" action="/admin/users/{{$user->id}}/subscriptions/{{$subscription->id}}" class="bg-white p-5">
                     @csrf
                     @method('PUT')
 
@@ -23,7 +24,7 @@ use App\Models\Subscription;
                     </x-users.form.label>
                     <div class="p-3 bg-gray-50">
                         <x-users.form.label for="name" class="text-lg bg">
-                            User Name :  {{$subscription->user->name}} {{$subscription->user->surname}}
+                            User Name :  {{$user->name}} {{$user->surname}}
                         </x-users.form.label>
 
                         <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>

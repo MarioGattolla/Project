@@ -9,30 +9,6 @@ use function Pest\Laravel\actingAs;
 
 uses(RefreshDatabase::class);
 
-test('cant see payment.index page', function ($role) {
-
-    /** @var User $user */
-    $user = User::factory()->role($role)->create();
-
-    $response = actingAs($user)->get('/admin/users/1/payments');
-
-    $response->assertStatus(403);
-})->with(function () {
-    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
-});
-
-test('cant see payment.create page', function ($role) {
-
-    /** @var User $user */
-    $user = User::factory()->role($role)->create();
-
-    $response = actingAs($user)->get('/admin/users/1/payments/create');
-
-    $response->assertStatus(403);
-})->with(function () {
-    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
-});
-
 test('cant see payment.show page', function ($role) {
 
     /** @var User $user */
@@ -109,8 +85,6 @@ test('payment.store return redirect', function () {
 
     /** @var User $user */
     $user = User::factory()->create();
-
-    allow_authorize('create', Payment::class);
 
     $request = Request::create('/admin/users/{user}/payments/create', 'POST', [
         'user_id' => $user->id,

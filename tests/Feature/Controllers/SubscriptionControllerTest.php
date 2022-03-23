@@ -10,30 +10,6 @@ use function Pest\Laravel\actingAs;
 
 uses(RefreshDatabase::class);
 
-test('cant see subscription.index page', function ($role) {
-
-    /** @var User $user */
-    $user = User::factory()->role($role)->create();
-
-    $response = actingAs($user)->get('/admin/users/1/subscriptions');
-
-    $response->assertStatus(403);
-})->with(function () {
-    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
-});
-
-test('cant see subscription.create page', function ($role) {
-
-    /** @var User $user */
-    $user = User::factory()->role($role)->create();
-
-    $response = actingAs($user)->get('/admin/users/1/subscriptions/create');
-
-    $response->assertStatus(403);
-})->with(function () {
-    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
-});
-
 test('cant see subscription.show page', function ($role) {
 
     /** @var User $user */
@@ -80,14 +56,18 @@ test('admin can create new subscription', function () {
 
 test('admin can edit subscription', function () {
 
-    /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    /** @var Service $service */
+    $service = Service::factory()->count(3)->create();
 
     /** @var Subscription $subscriptions */
     $subscriptions = Subscription::factory()->create();
 
+    /** @var User $user */
+    $user = User::factory()->role(Role::admin)->withRandomSubscriptions()->create();
+
+
     $response = $this->actingAs($user)->put(route('subscriptions.update',[$user,  $subscriptions]), [
-        'services' => Service::factory()->create()->id,
+        'services' =>[1, 2],
         'start' => '2022-10-10',
         'end' => '2022-11-10',
     ]);
@@ -117,8 +97,6 @@ test('subscription.store return redirect', function () {
     /** @var Service $services */
     $services = Service::factory()->count(3)->create();
 
-    allow_authorize('create', Subscription::class);
-
     $request = Request::create('/admin/users/1/subscriptions/create', 'POST', [
         'user_id' => $user->id,
         'services' => [1, 2],
@@ -134,16 +112,20 @@ test('subscription.store return redirect', function () {
 
 test('subscription.update return redirect', function () {
 
-    /** @var User $user */
-    $user = User::factory()->create();
+    /** @var Service $services */
+    $services = Service::factory()->count(3)->create();
 
     /** @var Subscription $subscription */
     $subscription = Subscription::factory()->create();
 
+    /** @var User $user */
+    $user = User::factory()->withRandomSubscriptions()->create();
+
+
     allow_authorize('update', $subscription);
 
-    $request = Request::create('/admin/users/1/subscriptions/{subscription}/edit', 'POST', [
-        'services' => Service::factory()->create()->id,
+    $request = Request::create('/admin/users/{user}/subscriptions/{subscription}/edit', 'POST', [
+        'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
     ]);

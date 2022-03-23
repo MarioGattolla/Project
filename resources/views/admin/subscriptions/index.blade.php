@@ -1,9 +1,12 @@
 @php
-    use App\Models\Subscription;
+    use App\Models\Subscription;use App\Models\User;
     /** @var Subscription[] $subscriptions */
-        $subscriptions = Subscription::orderBy('user_id')->paginate();
+        /** @var User $user */
 
-        /** @var \App\Models\User $user */
+    $subscriptions = match ($user->role->value){
+        'Admin' => Subscription::orderBy('user_id')->paginate(),
+        'User','Coach' => Subscription::whereRelation('user','user_id',$user->id)->paginate(),
+    }
 
 @endphp
 
@@ -24,9 +27,9 @@
                         <x-users.form.label class=" bg-blue-100 rounded-md px-2 py-2 mb-2">Subscription User
                             : {{$subscription->user->name}} {{$subscription->user->surname}}</x-users.form.label>
                         <div class="bg-gray-100 mb-2 rounded-md p-2 ">
-                            <div class=" ">Incription Start
+                            <div class=" ">Subscription Start
                                 : {{$subscription->start->format('Y-m-d')}}</div>
-                            <div class=" ">Incription End
+                            <div class=" ">Subscription End
                                 : {{$subscription->end->format('Y-m-d')}}</div>
                         </div>
                         <x-button href="{{route('subscriptions.show', [$user, $subscription])}}">Show</x-button>

@@ -1,16 +1,12 @@
 @php
     use App\Models\Payment;use App\Models\User;
     /** @var Payment[] $payments */
+    /** @var User $user */
 
-
-/** @var User $user */
-
-if ($user->role = 'Admin'){
-    $payments = Payment::orderBy('user_id')->paginate();
-}
-else{
-    $payments = Payment::whereRelation('user','user_id',$user->id)->paginate();
-}
+    $payments = match ($user->role->value){
+        'Admin' => Payment::orderBy('user_id')->paginate(),
+        'User', 'Coach' => Payment::whereRelation('user','user_id',$user->id)->paginate(),
+    }
 
 @endphp
 

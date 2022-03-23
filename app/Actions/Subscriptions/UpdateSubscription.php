@@ -3,6 +3,8 @@
 namespace App\Actions\Subscriptions;
 
 use App\Models\Subscription;
+use App\Models\User;
+use Carbon\CarbonInterface;
 use DefStudio\Actions\Concerns\ActsAsAction;
 use Illuminate\Http\Request;
 
@@ -10,14 +12,17 @@ class UpdateSubscription
 {
     use ActsAsAction;
 
-    public function handle(Request $request, Subscription $subscription): bool
+    public function handle( User $user, CarbonInterface $start, CarbonInterface $end, Subscription $subscription, array $subscribed_services): bool
     {
 
-        $subscribed_services = $request->input('services', []);
+
+      $subscription->update([
+           'user_id' => $user->id,
+            'start' => $start,
+            'end' => $end,
+        ]);
 
         $subscription->services()->sync($subscribed_services);
-
-        $subscription->fill($request->all());
 
         return $subscription->save();
     }
