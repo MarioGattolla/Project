@@ -13,7 +13,7 @@ class CreateNewPayment
 {
     use ActsAsAction;
 
-    public function handle(User $user, float $quote, CarbonInterface $date, ): Model|Payment
+    public function handle(User $user, float $quote, CarbonInterface $date ): Model|Payment
     {
        return $user->payments()->create([
            'date' =>  $date,

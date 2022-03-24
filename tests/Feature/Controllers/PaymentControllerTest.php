@@ -16,7 +16,7 @@ test('cant see payment.show page', function ($role) {
 
     Payment::factory()->create();
 
-    $response = actingAs($user)->get('/admin/users/1/payments/1');
+    $response = actingAs($user)->get('/payments/1');
 
     $response->assertStatus(403);
 })->with(function () {
@@ -30,7 +30,7 @@ test('cant see payment.edit page', function ($role) {
 
     Payment::factory()->create();
 
-    $response = actingAs($user)->get('/admin/users/1/payments/1/edit');
+    $response = actingAs($user)->get('/payments/1/edit');
 
     $response->assertStatus(403);
 })->with(function () {
@@ -38,34 +38,41 @@ test('cant see payment.edit page', function ($role) {
 });
 
 
-test('admin can create new payment', function () {
+test(' can create new payment', function ($role) {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role($role)->create();
 
-    $response = $this->actingAs($user)->post('/admin/users/1/payments', [
-        'user_id' => '1',
+    $response = $this->actingAs($user)->post('/payments', [
         'date' => '2020-10-10',
         'quote' => '30',
     ]);
 
-    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index', $user));
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
+})->with(function () {
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value);
 });
 
 test('admin can edit payment', function () {
 
+
+
+    /** @var User $admin */
+    $admin = User::factory()->role(Role::admin)->create();
+
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->create();
 
     /** @var Payment $payment */
-    $payment = Payment::factory()->create();
+    $payment = Payment::factory()->forUser($user)->create();
 
-    $response = $this->actingAs($user)->put(route('payments.update', [$user, $payment]), [
-        'date' => '2020-10-10',
+
+    $response = $this->actingAs($admin)->put(route('payments.update', $payment), [
+        'date' => today(),
         'quote' => '30',
     ]);
 
-    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.show',[$user, $payment]));
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.show', $payment));
 });
 
 test('admin can delete payment', function () {
@@ -76,9 +83,9 @@ test('admin can delete payment', function () {
     /** @var Payment $payment */
     $payment = Payment::factory()->create();
 
-    $response = $this->actingAs($user)->delete(route('payments.destroy', [$user, $payment]));
+    $response = $this->actingAs($user)->delete(route('payments.destroy',  $payment));
 
-    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index', $user));
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
 });
 
 test('payment.store return redirect', function () {
@@ -86,35 +93,39 @@ test('payment.store return redirect', function () {
     /** @var User $user */
     $user = User::factory()->create();
 
-    $request = Request::create('/admin/users/{user}/payments/create', 'POST', [
-        'user_id' => $user->id,
+    actingAs($user);
+    $request = Request::create('/payments/create', 'POST', [
+
         'quote' => '22',
         'date' => '2020-10-21',
     ]);
 
-    $response = app(PaymentController::class)->store( $request, $user);
+    $response = app(PaymentController::class)->store($request);
 
-    expect($response)->toBeRedirect(route('payments.index', $user) );
+    expect($response)->toBeRedirect(route('payments.index') );
 });
 
 test('payment.update return redirect', function () {
 
-    /** @var Payment $payment */
-    $payment = Payment::factory()->create();
+
 
     /** @var User $user */
     $user = User::factory()->create();
 
+    /** @var Payment $payment */
+    $payment = Payment::factory()->forUser($user)->create();
+
     allow_authorize('update', $payment);
 
-    $request = Request::create('/admin/users/{user}/payments/{payment}/edit', 'POST', [
+    actingAs($user);
+    $request = Request::create('/payments/{payment}/edit', 'POST', [
         'quote' => '22',
         'date' => '2020-10-21',
     ]);
 
-    $response = app(PaymentController::class)->update($request, $user, $payment);
+    $response = app(PaymentController::class)->update($request,  $payment);
 
-    expect($response)->toBeRedirect(route('payments.show', [$user, $payment]));
+    expect($response)->toBeRedirect(route('payments.show',  $payment));
 });
 
 test('payment.destroy return redirect', function () {
@@ -127,9 +138,9 @@ test('payment.destroy return redirect', function () {
 
     allow_authorize('delete', $payment);
 
-    $response = app(PaymentController::class)->destroy($user, $payment);
+    $response = app(PaymentController::class)->destroy($payment);
 
-    expect($response)->toBeRedirect(route('payments.index', $user));
+    expect($response)->toBeRedirect(route('payments.index'));
 });
 
 

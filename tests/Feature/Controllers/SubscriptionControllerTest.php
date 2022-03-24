@@ -17,7 +17,7 @@ test('cant see subscription.show page', function ($role) {
 
     Subscription::factory()->create();
 
-    $response = actingAs($user)->get('/admin/users/1/subscriptions/1');
+    $response = actingAs($user)->get('/subscriptions/1');
 
     $response->assertStatus(403);
 })->with(function () {
@@ -31,7 +31,7 @@ test('cant see subscription.edit page', function ($role) {
 
     Subscription::factory()->create();
 
-    $response = actingAs($user)->get('/admin/users/1/subscriptions/1/edit');
+    $response = actingAs($user)->get('/subscriptions/1/edit');
 
     $response->assertStatus(403);
 })->with(function () {
@@ -39,19 +39,21 @@ test('cant see subscription.edit page', function ($role) {
 });
 
 
-test('admin can create new subscription', function () {
+test(' can create new subscription', function ($role) {
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role($role)->create();
 
-    $response = $this->actingAs($user)->post('/admin/users/1/subscriptions', [
+    $response = $this->actingAs($user)->post('/subscriptions', [
         'user_id' => $user->id,
-        'services' => [1,2],
+        'services' => [1, 2],
         'start' => '2020-10-10',
         'end' => '2022-11-10',
     ]);
 
     expect($response)->toHaveStatus(302)->assertRedirect();
+})->with(function () {
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value);
 });
 
 test('admin can edit subscription', function () {
@@ -59,80 +61,91 @@ test('admin can edit subscription', function () {
     /** @var Service $service */
     $service = Service::factory()->count(3)->create();
 
-    /** @var Subscription $subscriptions */
-    $subscriptions = Subscription::factory()->create();
-
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->withRandomSubscriptions()->create();
+    $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
 
+    /** @var User $admin */
+    $admin = User::factory()->role(Role::admin)->withRandomSubscriptions()->create();
 
-    $response = $this->actingAs($user)->put(route('subscriptions.update',[$user,  $subscriptions]), [
-        'services' =>[1, 2],
+    /** @var Subscription $subscription */
+    $subscription = Subscription::factory()->forUser($user)->create();
+
+    $response = $this->actingAs($admin)->put(route('subscriptions.update', $subscription), [
+        'services' => [1, 2],
         'start' => '2022-10-10',
         'end' => '2022-11-10',
     ]);
 
-    expect($response)->toHaveStatus(302)->assertRedirect(route('subscriptions.show',[$user, $subscriptions]));
+    expect($response)->toHaveStatus(302)->assertRedirect(route('subscriptions.show', $subscription));
 });
 
 test('admin can delete subscription', function () {
 
+    /** @var Service $service */
+    $service = Service::factory()->count(3)->create();
+
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
 
-    /** @var Subscription $subscriptions */
-    $subscriptions = Subscription::factory()->create();
+    /** @var User $admin */
+    $admin = User::factory()->role(Role::admin)->withRandomSubscriptions()->create();
 
-    $response = $this->actingAs($user)->delete(route('subscriptions.destroy', [$user,$subscriptions]));
+    /** @var Subscription $subscription */
+    $subscription = Subscription::factory()->forUser($user)->create();
 
-    expect($response)->toHaveStatus(302)->assertRedirect(route('subscriptions.index', $user));
+    $response = $this->actingAs($admin)->delete(route('subscriptions.destroy', $subscription));
+
+    expect($response)->toHaveStatus(302)->assertRedirect(route('subscriptions.index'));
 });
 
 
 test('subscription.store return redirect', function () {
 
+    /** @var Service $service */
+    $service = Service::factory()->count(3)->create();
+
     /** @var User $user */
-    $user = User::factory()->create();
+    $user = User::factory()->role(Role::user)->create();
 
-    /** @var Service $services */
-    $services = Service::factory()->count(3)->create();
+    actingAs($user);
 
-    $request = Request::create('/admin/users/1/subscriptions/create', 'POST', [
-        'user_id' => $user->id,
+    $request = Request::create('/subscriptions/create', 'POST', [
+        'user_id' => '1',
         'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
 
     ]);
 
-    $response = app(SubscriptionController::class)->store($request, $user);
+    $response = app(SubscriptionController::class)->store($request);
 
-    expect($response)->toBeRedirect(route('subscriptions.index', $user));
-});
+    expect($response)->toBeRedirect(route('subscriptions.index'));
+})->only();
 
 test('subscription.update return redirect', function () {
 
-    /** @var Service $services */
-    $services = Service::factory()->count(3)->create();
-
-    /** @var Subscription $subscription */
-    $subscription = Subscription::factory()->create();
+    /** @var Service $service */
+    $service = Service::factory()->count(3)->create();
 
     /** @var User $user */
-    $user = User::factory()->withRandomSubscriptions()->create();
+    $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
+
+
+    /** @var Subscription $subscriptions */
+    $subscription = Subscription::factory()->forUser($user)->create();
 
 
     allow_authorize('update', $subscription);
 
-    $request = Request::create('/admin/users/{user}/subscriptions/{subscription}/edit', 'POST', [
+    $request = Request::create('/subscriptions/{subscription}/edit', 'POST', [
         'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
     ]);
 
-    $response = app(SubscriptionController::class)->update($request, $user, $subscription);
+    $response = app(SubscriptionController::class)->update($request, $subscription);
 
-    expect($response)->toBeRedirect(route('subscriptions.show', [$user, $subscription]));
+    expect($response)->toBeRedirect(route('subscriptions.show', $subscription));
 });
 
 test('subscription.destroy return redirect', function () {
@@ -143,9 +156,9 @@ test('subscription.destroy return redirect', function () {
     /** @var Subscription $subscription */
     $subscription = Subscription::factory()->make();
 
-    allow_authorize('delete',  $subscription);
+    allow_authorize('delete', $subscription);
 
-    $response = app(SubscriptionController::class)->destroy($user, $subscription);
+    $response = app(SubscriptionController::class)->destroy($subscription);
 
-    expect($response)->toBeRedirect(route('subscriptions.index', $user));
+    expect($response)->toBeRedirect(route('subscriptions.index'));
 });

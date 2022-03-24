@@ -31,8 +31,11 @@
                             <div>Payment Quote : €{{$payment->quote}}</div>
                             <div>Payment Date : {{$payment->date->format('Y-m-d')}}</div>
                         </div>
-                        <x-button class="m-3" type="button" href="{{route('payments.show', [$user,$payment])}}">Show
-                        </x-button>
+
+                        @if($user->role->value == 'Admin')
+                            <x-button class="m-3" type="button" href="{{route('payments.show',$payment)}}">Show</x-button>
+
+                        @endif
                     </div>
                 @endforeach
             </div>

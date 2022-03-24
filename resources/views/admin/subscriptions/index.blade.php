@@ -32,7 +32,11 @@
                             <div class=" ">Subscription End
                                 : {{$subscription->end->format('Y-m-d')}}</div>
                         </div>
-                        <x-button href="{{route('subscriptions.show', [$user, $subscription])}}">Show</x-button>
+
+                        @if($user->role->value == 'Admin')
+                            <x-button href="{{route('subscriptions.show', $subscription)}}">Show</x-button>
+                        @endif
+
 
                     </div>
                 @endforeach

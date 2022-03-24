@@ -19,6 +19,7 @@ class CreateNewSubscription
     public function handle(User $user, Carbon $start, Carbon $end, array $subscribed_services): Model|Subscription
     {
         $subscription = $user->subscriptions()->create([
+            'user_id' => $user->id,
             'start' => $start,
             'end' => $end,
         ]);

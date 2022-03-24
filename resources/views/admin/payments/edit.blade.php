@@ -15,7 +15,7 @@ use App\Models\User;
     <div class="py-12">
         <x-body-div>
             <x-div-box class="border-2 border-gray-200 rounded m-3">
-                <form method="POST" action="/admin/users/{{$user->id}}/payments/{{$payment->id}}" class="bg-white p-5">
+                <form method="POST" action="/payments/{{$payment->id}}" class="bg-white p-5">
                     @csrf
                     @method('PUT')
 

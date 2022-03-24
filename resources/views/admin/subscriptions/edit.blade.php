@@ -15,7 +15,7 @@ use App\Models\User;
     <div name="body" class="py-12">
         <x-body-div>
             <x-div-box class="border-2 border-gray-200 rounded">
-                <form method="POST" action="/admin/users/{{$user->id}}/subscriptions/{{$subscription->id}}" class="bg-white p-5">
+                <form method="POST" action="/subscriptions/{{$subscription->id}}" class="bg-white p-5">
                     @csrf
                     @method('PUT')
 
@@ -24,7 +24,7 @@ use App\Models\User;
                     </x-users.form.label>
                     <div class="p-3 bg-gray-50">
                         <x-users.form.label for="name" class="text-lg bg">
-                            User Name :  {{$user->name}} {{$user->surname}}
+                            User Name :  {{$subscription->user->name}} {{$subscription->user->surname}}
                         </x-users.form.label>
 
                         <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>

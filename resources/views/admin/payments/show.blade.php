@@ -36,7 +36,7 @@ use App\Models\User;
 
                     </div>
                 </div>
-                <x-button class="mt-3 mb-3"><a href="{{route('payments.edit',[$user, $payment])}}">Edit</a></x-button>
+                <x-button class="mt-3 mb-3"><a href="{{route('payments.edit', $payment)}}">Edit</a></x-button>
                 <form method="POST">
                     @csrf
                     @method('DELETE' )

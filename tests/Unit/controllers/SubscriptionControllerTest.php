@@ -19,7 +19,7 @@ test('subscription.show return view', closure: function () {
 
     allow_authorize('view', $subscription);
 
-    $response = app(SubscriptionController::class)->show($user, $subscription);
+    $response = app(SubscriptionController::class)->show( $subscription);
 
     expect($response)->toBeView('admin.subscriptions.show', 'subscription');
 });
@@ -44,7 +44,7 @@ test('subscription.edit return view', function () {
 
     allow_authorize('update', $subscription);
 
-    $response = app(SubscriptionController::class)->edit($user, $subscription);
+    $response = app(SubscriptionController::class)->edit( $subscription);
 
     expect($response)->toBeView('admin.subscriptions.edit', 'subscription');
 });

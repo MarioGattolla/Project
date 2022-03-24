@@ -34,12 +34,14 @@ Route::get('/dashboard', [DashboardController::class, 'dashboard'])->middleware(
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('users', UserController::class);
-    Route::resource('/users/{user}/subscriptions', SubscriptionController::class);
     Route::resource('services', ServiceController::class)->except('show');
-    Route::resource('/users/{user}/payments', PaymentController::class);
     Route::post('/task/send_payment_reminder_emails', [PaymentReminderController::class, 'send_debit_reminder_emails'])->name('payments.reminder.send-emails');
-
 });
+
+Route::resource('/payments', PaymentController::class);
+Route::resource('/subscriptions', SubscriptionController::class);
+
+
 Route::get('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach'])->middleware(['auth'])->name('beacoach');
 Route::put('/admin/users/{user}/beacoach', [UserController::class, 'be_a_coach_update'])->middleware(['auth'])->name('beacoach.update');
 

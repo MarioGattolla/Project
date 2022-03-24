@@ -15,11 +15,11 @@ use App\Models\User;
         <x-body-div>
             <x-div-box>
 
-                    <form method="POST" action="{{route('payments.index', $user)}}">
+                    <form method="POST" action="{{route('payments.store')}}">
                     @csrf
                     <x-div-box class="border-gray-200 border-2 rounded">
 
-                        <x-users.form.label for="user_id" class="text-xl">{{$user->name}} {{$user->surname}} , create a new Payment</x-users.form.label>
+                        <div class="text-xl">{{$user->name}} {{$user->surname}} , create a new Payment</div>
 
                         <x-users.form.label for="quote" class="text-lg">Insert the Payment Quote</x-users.form.label>
                         <x-users.form.imput id="quote" name="quote" type="number"/>
