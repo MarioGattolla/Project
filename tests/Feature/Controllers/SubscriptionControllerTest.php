@@ -105,12 +105,13 @@ test('subscription.store return redirect', function () {
     $service = Service::factory()->count(3)->create();
 
     /** @var User $user */
-    $user = User::factory()->role(Role::user)->create();
+    $user = User::factory()->role(Role::admin)->create();
 
     actingAs($user);
 
     $request = Request::create('/subscriptions/create', 'POST', [
-        'user_id' => '1',
+        'user' => $user,
+        'id' => 1,
         'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
