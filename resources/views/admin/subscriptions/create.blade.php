@@ -6,7 +6,12 @@ use App\Models\User;
 
 $search_users = User::all()
     ->map(function (User $user) {
-        return [$user->id, $user->name, $user->surname, $user->email];
+        return [
+            'user_id' => $user->id,
+            'user_name' => $user->name,
+            'user_surname' => $user->surname,
+            'user_email' => $user->email
+        ];
     });
 
 ?>
@@ -16,6 +21,41 @@ $search_users = User::all()
         <x-header>
             {{ __('Create a new Subscription:  ') }}
         </x-header>
+
+        <script>
+
+            function filterUser() {
+                return {
+                    search: "",
+                    data: sourceData,
+                    get filteredUser() {
+                        if (this.search === "") {
+                            return this.data;
+                        }
+                        return this.data.filter((item) => {
+                            return item.user_surname
+                                .toLowerCase()
+                                .includes(this.search.toLowerCase());
+                        });
+                    },
+                };
+            }
+
+            var sourceData = [
+                {
+                    id: "1",
+                    user_surname: "Tiger Nixon",
+                },
+                {
+                    id: "2",
+                    user_surname:
+                        "Garrett Winters",
+
+                },
+            ];
+
+        </script>
+
     </x-slot>
     <div class="py-12" name="body">
         <x-body-div>
@@ -24,31 +64,18 @@ $search_users = User::all()
                 <form method="POST" action="{{route('subscriptions.store')}}">
                     @csrf
                     <x-div-box class="border-gray-200 border-2 rounded">
-                        <div class=" rounded-md border-2 flex-col w-1/3" x-data="{
-                        open: false,
-                        filter:'',
-                        toggle(){this.open = ! this.open},
-                        close(){this.open = false},
-                         }">
-                            <input class="w-full flex-col" name="filter" x-model="filter" type="search"
-                                   @click="toggle()" placeholder="Search for the user..."/>
-                            <div class="flex-col" x-show="open" @click.away="close()">
-                                @foreach(\App\Models\User::pluck('name', 'id') as $avaiable_user_id => $avaiable_user_name)
-                                    <div name="user_id" class=" p-3 rounded-md hover:bg-blue-100 border-2"
-                                         value="{{$avaiable_user_id}}">{{$avaiable_user_name}}</div>
-                                @endforeach
+
+                        <div class=" rounded-md border-2 flex-col w-1/3" x-data="filterUser()">
+                            <input class="w-full flex-col" type="search" x-model="search"
+                                   placeholder="Search for the user..."/>
+                            <div class="flex-col">
+                                <template x-for="item in filteredUser" :key="item">
+                                    <div class="flex">
+                                        <p x-text="item.user_surname"></p>
+                                    </div>
+                                </template>
                             </div>
                         </div>
-
-                        {{--                        @if($user->role->value == 'Admin')--}}
-                        {{--                            <select name="id" >--}}
-                        {{--                                @foreach(\App\Models\User::pluck('name', 'id') as $avaiable_user_id => $avaiable_user_name)--}}
-                        {{--                                    <option name="user_id" value="{{$avaiable_user_id}}">{{$avaiable_user_name}}</option>--}}
-                        {{--                                @endforeach--}}
-                        {{--                            </select>--}}
-                        {{--                        @else--}}
-                        {{--                            <div class="text-lg">{{$user->name}} {{$user->surname}} , create a new Subscription</div>--}}
-                        {{--                        @endif--}}
 
 
                         <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>
@@ -71,12 +98,10 @@ $search_users = User::all()
                 </form>
 
             </x-div-box>
+
         </x-body-div>
 
     </div>
 
 </x-app-layout>
 
-<script>
-   var sourceData = @json($search_users);
-</script>
