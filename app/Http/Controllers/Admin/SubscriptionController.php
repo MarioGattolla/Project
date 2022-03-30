@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Subscriptions\CreateNewSubscription;
 use App\Actions\Subscriptions\DeleteSubscription;
 use App\Actions\Subscriptions\UpdateSubscription;
+use App\Actions\Users\UpdateUser;
 use App\Http\Controllers\Controller;
 use App\Models\Subscription;
 use App\Models\User;
+use Auth;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -22,7 +24,7 @@ class SubscriptionController extends Controller
 
     {
         return view('admin.subscriptions.index', [
-            'user' => $user ?? \Auth::user(),
+            'user' => $user ?? Auth::user(),
         ]);
     }
 
@@ -38,7 +40,7 @@ class SubscriptionController extends Controller
     public function create(User $user = null): View
     {
         return view('admin.subscriptions.create', [
-            'user' => $user ?? \Auth::user(),
+            'user' => $user ?? Auth::user(),
         ]);
     }
 
@@ -51,12 +53,13 @@ class SubscriptionController extends Controller
             'services.*' => 'int|exists:services,id',
         ]);
 
-
-        $user = \Auth::user();
-        if ($user->role->value == 'Admin') {
+        if (auth()->user()->role->value == 'Admin') {
             $user_request = User::findOrFail($request->id);
+
+            UpdateUser::run($request, $user_request);
+
         } else {
-            $user_request = $user;
+            $user_request = $request->user();
         }
 
         $services = $request->input('services');
@@ -65,8 +68,8 @@ class SubscriptionController extends Controller
 
         $end = Carbon::make($request->input('end'));
 
-        CreateNewSubscription::run($user_request , $start , $end, $services);
-        /** @phpstan-ignore-line */
+        /** @phpstan-ignore-next-line */
+        CreateNewSubscription::run($user_request, $start, $end, $services);
 
         return redirect()->route('subscriptions.index')->with('success', 'Subscription created !!');
     }

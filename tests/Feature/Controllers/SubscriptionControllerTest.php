@@ -99,23 +99,20 @@ test('admin can delete subscription', function () {
 });
 
 
-test('subscription.store return redirect', function () {
+test('subscription.store return redirect',  function () {
 
     /** @var Service $service */
     $service = Service::factory()->count(3)->create();
 
     /** @var User $user */
-    $user = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->create();
 
     actingAs($user);
 
-    $request = Request::create('/subscriptions/create', 'POST', [
-        'user' => $user,
-        'id' => 1,
+    $request = \Illuminate\Http\Request::create('/subscriptions/create', 'POST', [
         'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
-
     ]);
 
     $response = app(SubscriptionController::class)->store($request);
@@ -133,16 +130,17 @@ test('subscription.update return redirect', function () {
 
 
     /** @var Subscription $subscriptions */
-    $subscription = Subscription::factory()->forUser($user)->create();
+    $subscription = Subscription::factory()->count(2)->forUser($user)->create();
 
 
     allow_authorize('update', $subscription);
 
-    $request = Request::create('/subscriptions/{subscription}/edit', 'POST', [
+    $request = \Illuminate\Http\Request::create('/subscriptions/{subscription}/edit', 'POST', [
         'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
     ]);
+
 
     $response = app(SubscriptionController::class)->update($request, $subscription);
 

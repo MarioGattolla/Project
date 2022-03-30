@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Actions\Payments\CreateNewPayment;
 use App\Actions\Payments\DeletePayment;
 use App\Actions\Payments\UpdatePayment;
+use App\Actions\Users\UpdateUser;
 use App\Http\Controllers\Controller;
 use App\Models\Payment;
 use App\Models\User;
@@ -54,6 +55,7 @@ class PaymentController extends Controller
     /**
      * @throws AuthorizationException
      * @throws ValidationException
+     * @throws \DefStudio\Actions\Exceptions\ActionException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -63,11 +65,21 @@ class PaymentController extends Controller
             'date' => 'required|date',
         ]);
 
-        $user = Auth::user();
+
+
+        if ($request->user()->role->value == 'Admin') {
+            $user_request = User::findOrFail($request->id);
+
+            UpdateUser::run($request, $user_request);
+
+        } else {
+            $user_request = $request->user();
+        }
+
         $quote = $request->input('quote');
         $date = Carbon::make($request->input('date'));
 
-        CreateNewPayment::run($user, $quote, $date);
+        CreateNewPayment::run($user_request, $quote, $date);
 
         return redirect()->route('payments.index')->with('success', 'Payment successfully created!!');
     }
