@@ -11,6 +11,7 @@ use App\Models\Payment;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use DefStudio\Actions\Exceptions\ActionException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ use Illuminate\View\View;
 class PaymentController extends Controller
 {
     /**
-     * @throws AuthorizationException
+     *
      */
     public function index(User $user = null): View
     {
@@ -43,7 +44,6 @@ class PaymentController extends Controller
     }
 
     /**
-     * @throws AuthorizationException
      */
     public function create(User $user = null): View
     {
@@ -53,9 +53,8 @@ class PaymentController extends Controller
     }
 
     /**
-     * @throws AuthorizationException
      * @throws ValidationException
-     * @throws \DefStudio\Actions\Exceptions\ActionException
+     * @throws ActionException
      */
     public function store(Request $request): RedirectResponse
     {
@@ -66,14 +65,16 @@ class PaymentController extends Controller
         ]);
 
 
+        /** @var User $user */
+        $user= auth()->user();
 
-        if ($request->user()->role->value == 'Admin') {
+        if ($user->role->value == 'Admin' ) {
             $user_request = User::findOrFail($request->id);
 
             UpdateUser::run($request, $user_request);
 
         } else {
-            $user_request = $request->user();
+            $user_request = $user;
         }
 
         $quote = $request->input('quote');
@@ -100,7 +101,7 @@ class PaymentController extends Controller
 
     /**
      * @throws AuthorizationException
-     * @throws ValidationException
+     * @throws ValidationException|ActionException
      */
     public function update(Request $request, Payment $payment): RedirectResponse
     {
@@ -122,7 +123,7 @@ class PaymentController extends Controller
 
 
     /**
-     * @throws AuthorizationException
+     * @throws AuthorizationException|ActionException
      */
     public function destroy( Payment $payment): RedirectResponse
     {

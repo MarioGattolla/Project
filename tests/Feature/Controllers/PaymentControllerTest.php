@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpUnhandledExceptionInspection */
+
+/** @noinspection PhpParamsInspection */
 
 use App\Enums\Role;
 use App\Http\Controllers\Admin\PaymentController;
@@ -44,18 +46,32 @@ test(' can create new payment', function ($role) {
     $user = User::factory()->role($role)->create();
 
     $response = $this->actingAs($user)->post('/payments', [
-        'date' => '2020-10-10',
+        'date' => today(),
         'quote' => '30',
     ]);
 
     expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
 })->with(function () {
-    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value);
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
 });
 
+test(' admin can create new payment', function () {
+
+    /** @var User $user */
+    $admin = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->create();
+
+    $response = $this->actingAs($admin)->post('/payments', [
+        'id' => $user->id,
+        'date' => today(),
+        'quote' => '30',
+    ]);
+
+    expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
+});
+
+
 test('admin can edit payment', function () {
-
-
 
     /** @var User $admin */
     $admin = User::factory()->role(Role::admin)->create();
@@ -88,14 +104,35 @@ test('admin can delete payment', function () {
     expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
 });
 
-test('payment.store return redirect', function () {
+test('payment.store return redirect', function ($role) {
 
     /** @var User $user */
-    $user = User::factory()->create();
+    $user = User::factory()->role($role)->create();
 
     actingAs($user);
-    $request = Request::create('/payments/create', 'POST', [
+    $request = \Illuminate\Http\Request::create('/payments/create', 'POST', [
 
+        'quote' => '22',
+        'date' => '2020-10-21',
+    ]);
+
+    $response = app(PaymentController::class)->store($request);
+
+    expect($response)->toBeRedirect(route('payments.index') );
+})->with(function () {
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
+});
+
+test('payment.store return redirect with Admin', closure: function () {
+
+    /** @var User $user */
+    $admin = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->create();
+
+    actingAs($admin);
+
+    $request = \Illuminate\Http\Request::create('/payments/create', 'POST', [
+        'id' => $user->id,
         'quote' => '22',
         'date' => '2020-10-21',
     ]);
@@ -107,8 +144,6 @@ test('payment.store return redirect', function () {
 
 test('payment.update return redirect', function () {
 
-
-
     /** @var User $user */
     $user = User::factory()->create();
 
@@ -117,8 +152,7 @@ test('payment.update return redirect', function () {
 
     allow_authorize('update', $payment);
 
-    actingAs($user);
-    $request = Request::create('/payments/{payment}/edit', 'POST', [
+    $request = \Illuminate\Http\Request::create('/payments/{payment}/edit', 'POST', [
         'quote' => '22',
         'date' => '2020-10-21',
     ]);
@@ -134,7 +168,7 @@ test('payment.destroy return redirect', function () {
     $payment = Payment::factory()->create();
 
     /** @var User $user */
-    $user = User::factory()->create();
+    User::factory()->create();
 
     allow_authorize('delete', $payment);
 

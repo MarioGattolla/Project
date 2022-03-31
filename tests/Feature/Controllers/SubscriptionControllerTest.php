@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection PhpParamsInspection */
 
 use App\Enums\Role;
 use App\Http\Controllers\Admin\SubscriptionController;
@@ -45,7 +45,6 @@ test(' can create new subscription', function ($role) {
     $user = User::factory()->role($role)->create();
 
     $response = $this->actingAs($user)->post('/subscriptions', [
-        'user_id' => $user->id,
         'services' => [1, 2],
         'start' => '2020-10-10',
         'end' => '2022-11-10',
@@ -53,13 +52,30 @@ test(' can create new subscription', function ($role) {
 
     expect($response)->toHaveStatus(302)->assertRedirect();
 })->with(function () {
-    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value);
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
+});
+
+test('admin can create new subscription', function () {
+
+    /** @var User $user */
+    $admin = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->create();
+
+
+    $response = $this->actingAs($admin)->post('/subscriptions', [
+        'id' => $user->id,
+        'services' => [1, 2],
+        'start' => '2020-10-10',
+        'end' => '2022-11-10',
+    ]);
+
+    expect($response)->toHaveStatus(302)->assertRedirect();
 });
 
 test('admin can edit subscription', function () {
 
     /** @var Service $service */
-    $service = Service::factory()->count(3)->create();
+    Service::factory()->count(3)->create();
 
     /** @var User $user */
     $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
@@ -82,7 +98,7 @@ test('admin can edit subscription', function () {
 test('admin can delete subscription', function () {
 
     /** @var Service $service */
-    $service = Service::factory()->count(3)->create();
+   Service::factory()->count(3)->create();
 
     /** @var User $user */
     $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
@@ -99,13 +115,13 @@ test('admin can delete subscription', function () {
 });
 
 
-test('subscription.store return redirect',  function () {
+test('subscription.store return redirect', function ($role) {
 
     /** @var Service $service */
-    $service = Service::factory()->count(3)->create();
+    Service::factory()->count(3)->create();
 
     /** @var User $user */
-    $user = User::factory()->role(Role::user)->create();
+    $user = User::factory()->role($role)->create();
 
     actingAs($user);
 
@@ -118,19 +134,46 @@ test('subscription.store return redirect',  function () {
     $response = app(SubscriptionController::class)->store($request);
 
     expect($response)->toBeRedirect(route('subscriptions.index'));
-})->only();
+})->with(function () {
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
+});
+
+test('subscription.store return redirect with admin', function () {
+
+    /** @var Service $service */
+    Service::factory()->count(3)->create();
+
+    /** @var User $user */
+    $admin = User::factory()->role(Role::admin)->create();
+    $user = User::factory()->role(Role::user)->create();
+
+    actingAs($admin);
+
+    $request = \Illuminate\Http\Request::create('/subscriptions/create', 'POST', [
+        'id'=> $user->id,
+        'services' => [1, 2],
+        'start' => '2022-03-01',
+        'end' => '2023-01-24',
+    ]);
+
+    $response = app(SubscriptionController::class)->store($request);
+
+    expect($response)->toBeRedirect(route('subscriptions.index'));
+})->with(function () {
+    return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
+});
+
 
 test('subscription.update return redirect', function () {
 
     /** @var Service $service */
-    $service = Service::factory()->count(3)->create();
+   Service::factory()->count(3)->create();
 
     /** @var User $user */
-    $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
-
+    $user = User::factory()->create();
 
     /** @var Subscription $subscriptions */
-    $subscription = Subscription::factory()->count(2)->forUser($user)->create();
+    $subscription = Subscription::factory()->forUser($user)->withRandomServices()->create();
 
 
     allow_authorize('update', $subscription);
@@ -150,7 +193,7 @@ test('subscription.update return redirect', function () {
 test('subscription.destroy return redirect', function () {
 
     /** @var User $user */
-    $user = User::factory()->create();
+   User::factory()->create();
 
     /** @var Subscription $subscription */
     $subscription = Subscription::factory()->make();

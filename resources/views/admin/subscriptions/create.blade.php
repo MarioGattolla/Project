@@ -100,15 +100,14 @@ $search_users = User::where('role', '=', 'User')->get()
 
 
                             <div name="user_form">
-                                <input x-data="{id: ''}" class="w-1/3 mb-3 hidden h-10" value="" name="id" id="id"/>
+                                <input class="w-1/3 mb-3 hidden h-10" value="" name="id" id="id" />
                                 <div>User Name</div>
-                                <input x-data="{name: ''}" class="w-1/3 mb-3 h-10" type="text" name="name" id="name"/>
+                                <input class=" w-1/3 mb-3 h-10" type="text"  name="name" id="name" required />
                                 <div>User Surname</div>
-                                <input x-data="{surname: ''}" class="w-1/3 mb-3 h-10" type="text" name="surname"
-                                       id="surname"/>
+                                <input class="w-1/3 mb-3 h-10" type="text" name="surname" id="surname" required/>
                                 <div>User Email</div>
-                                <input x-data="{email: ''}" class="w-1/3 mb-3 h-10" type="text" name="email"
-                                       id="email"/>
+                                <input class=" w-1/3 mb-3 h-10" type="text" name="email"
+                                       id="email" required/>
                             </div>
 
                         @else
@@ -117,7 +116,7 @@ $search_users = User::where('role', '=', 'User')->get()
                             <div>User Name : {{$user->email}}</div>
 
                         @endif
-                        <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>
+                        <x-users.form.label for="services" class="text-lg" >Select the Services</x-users.form.label>
                         @foreach(\App\Models\Service::pluck('name', 'id') as $service_id => $service_label)
                             <label>
                                 <input type="checkbox" name="services[]" value="{{$service_id}}">

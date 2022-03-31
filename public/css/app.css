@@ -840,6 +840,9 @@ select {
 	white-space: nowrap;
 	border-width: 0;
 }
+.invisible {
+	visibility: hidden;
+}
 .fixed {
 	position: fixed;
 }
@@ -1522,6 +1525,10 @@ select {
 	--tw-text-opacity: 1;
 	color: rgba(209, 213, 219, var(--tw-text-opacity));
 }
+.text-pink-600 {
+	--tw-text-opacity: 1;
+	color: rgba(219, 39, 119, var(--tw-text-opacity));
+}
 .underline {
 	text-decoration: underline;
 }
@@ -1742,6 +1749,17 @@ select {
 }
 .disabled\:opacity-25:disabled {
 	opacity: 0.25;
+}
+.peer:default ~ .peer-default\:bg-red-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
+}
+.peer:invalid ~ .peer-invalid\:visible {
+	visibility: visible;
+}
+.peer:invalid ~ .peer-invalid\:bg-red-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgba(239, 68, 68, var(--tw-bg-opacity));
 }
 @media (min-width: 640px) {
 

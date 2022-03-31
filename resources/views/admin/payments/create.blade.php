@@ -70,7 +70,7 @@ $search_users = User::where('role', '=', 'User')->get()
         <x-body-div>
             <x-div-box>
 
-                    <form method="POST" action="{{route('payments.store')}}">
+                <form method="POST" action="{{route('payments.store')}}">
                     @csrf
                     <x-div-box class="border-gray-200 border-2 rounded">
 
@@ -86,7 +86,7 @@ $search_users = User::where('role', '=', 'User')->get()
 
                                 />
                                 <div class="overflow-y-auto max-h-52 border-2" x-show="filteredUser.length>0">
-                                    <template x-for="(item, index) in filteredUser">
+                                    <template x-for="item in filteredUser">
                                         <option class=" p-2   rounded-md hover:bg-indigo-100"
                                                 @click="setUserFields(item)"
                                                 x-text="item.user_name + ' ' + item.user_surname"
@@ -99,14 +99,14 @@ $search_users = User::where('role', '=', 'User')->get()
 
 
                             <div name="user_form">
-                                <input x-data="{id: ''}" class="w-1/3 mb-3 hidden h-10" value="" name="id" id="id"/>
+                                <input class="w-1/3 mb-3 hidden h-10" value="" name="id" id="id" />
                                 <div>User Name</div>
-                                <input x-data="{name: ''}" class="w-1/3 mb-3 h-10" type="text" name="name" id="name"/>
+                                <input class="w-1/3 mb-3 h-10 has-validation" type="text" name="name" id="name"/>
                                 <div>User Surname</div>
-                                <input x-data="{surname: ''}" class="w-1/3 mb-3 h-10" type="text" name="surname"
+                                <input class="w-1/3 mb-3 h-10" type="text" name="surname"
                                        id="surname"/>
                                 <div>User Email</div>
-                                <input x-data="{email: ''}" class="w-1/3 mb-3 h-10" type="text" name="email"
+                                <input class="w-1/3 mb-3 h-10" type="text" name="email"
                                        id="email"/>
                             </div>
 

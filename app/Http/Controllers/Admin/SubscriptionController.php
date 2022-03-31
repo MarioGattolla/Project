@@ -53,13 +53,16 @@ class SubscriptionController extends Controller
             'services.*' => 'int|exists:services,id',
         ]);
 
-        if (auth()->user()->role->value == 'Admin') {
+        /** @var User $user */
+        $user = auth()->user();
+
+        if ($user->role->value == 'Admin') {
             $user_request = User::findOrFail($request->id);
 
             UpdateUser::run($request, $user_request);
 
         } else {
-            $user_request = $request->user();
+            $user_request = $user;
         }
 
         $services = $request->input('services');
