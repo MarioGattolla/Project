@@ -4,15 +4,7 @@
 
 use App\Models\User;
 
-$search_users = User::where('role', '=', 'User')->get()
-    ->map(function (User $user) {
-        return [
-            'user_id' => $user->id,
-            'user_name' => $user->name,
-            'user_surname' => $user->surname,
-            'user_email' => $user->email
-        ];
-    });
+$search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 'email']);
 
 ?>
 
@@ -28,11 +20,19 @@ $search_users = User::where('role', '=', 'User')->get()
                     search: '',
                     data: sourceData,
                     selectedUserIndex: '',
+
+                    user: {
+                        id: null,
+                        name: null,
+                        surname: null,
+                        email: null,
+                    },
+
                     get filteredUser() {
                         if (this.search === '') {
                             return [];
                         }
-                        return this.data.filter(search => search.user_surname.toLowerCase().includes(this.search.toLowerCase()));
+                        return this.data.filter(search => search.surname.toLowerCase().includes(this.search.toLowerCase()));
 
                     },
                     reset() {
@@ -55,14 +55,7 @@ $search_users = User::where('role', '=', 'User')->get()
                 };
             }
 
-            function setUserFields(item) {
-                document.getElementById("id").setAttribute('value', item.user_id);
-                document.getElementById("name").setAttribute('value', item.user_name);
-                document.getElementById("surname").setAttribute('value', item.user_surname);
-                document.getElementById("email").setAttribute('value', item.user_email);
-            }
-
-            var sourceData = @json($search_users);
+            let sourceData = @json($search_users);
 
         </script>
 
@@ -76,39 +69,44 @@ $search_users = User::where('role', '=', 'User')->get()
                     <x-div-box class="border-gray-200 border-2 rounded">
 
                         @if($user->role->value == 'Admin')
-                            <div class=" rounded-md  flex-col w-1/3 p-2 " x-data="filterUser()">
-                                <input class="w-full flex-col "
-                                       type="search"
-                                       x-model="search" placeholder="Search for User"
-                                       @click.away="reset()"
-                                       x-on:keyup.escape="reset()"
-                                       x-on:keyup.down="selectNextUser()"
-                                       x-on:keyup.up="selectPreviousUser()"
+                            <div x-data="filterUser()">
+                                <div class=" rounded-md  flex-col w-1/3 p-2 " >
+                                    <input class="w-full flex-col "
+                                           type="search"
+                                           x-model="search" placeholder="Search for User"
+                                           @click.away="reset()"
+                                           x-on:keyup.escape="reset()"
+                                           x-on:keyup.down="selectNextUser()"
+                                           x-on:keyup.up="selectPreviousUser()"
 
-                                />
-                                <div class="overflow-y-auto max-h-52 border-2" x-show="filteredUser.length>0">
-                                    <template x-for="(item, index) in filteredUser">
-                                        <option class=" p-2   rounded-md hover:bg-indigo-100"
-                                                @click="setUserFields(item)"
-                                                x-text="item.user_name + ' ' + item.user_surname"
-                                                :class="{'bg-indigo-100': index===selectedUserIndex}">
-                                        </option>
+                                    />
 
-                                    </template>
+
+                                    <div class="overflow-y-auto max-h-52 border-2" x-show="filteredUser.length>0">
+                                        <template x-for="(selected_user, index) in filteredUser">
+                                            <option class=" p-2   rounded-md hover:bg-indigo-100"
+                                                    @click="user = selected_user"
+                                                    x-text="selected_user.name + ' ' + selected_user.surname"
+                                                    :class="{'bg-indigo-100': index===selectedUserIndex}">
+                                            </option>
+
+                                        </template>
+                                    </div>
+                                </div>
+
+
+                                <div name="user_form">
+                                    <input class="w-1/3 mb-3 hidden h-10" x-model="id" name="user.id" id="id"/>
+                                    <div>User Name</div>
+                                    <input class=" w-1/3 mb-3 h-10" type="text" x-model="user.name" name="name" id="name" required/>
+                                    <div>User Surname</div>
+                                    <input class="w-1/3 mb-3 h-10" type="text" x-model="user.surname" name="surname" id="surname" required/>
+                                    <div>User Email</div>
+                                    <input class=" w-1/3 mb-3 h-10" type="text" x-model="user.email" name="email"
+                                           id="email" required/>
                                 </div>
                             </div>
 
-
-                            <div name="user_form">
-                                <input class="w-1/3 mb-3 hidden h-10" value="" name="id" id="id" />
-                                <div>User Name</div>
-                                <input class=" w-1/3 mb-3 h-10" type="text"  name="name" id="name" required />
-                                <div>User Surname</div>
-                                <input class="w-1/3 mb-3 h-10" type="text" name="surname" id="surname" required/>
-                                <div>User Email</div>
-                                <input class=" w-1/3 mb-3 h-10" type="text" name="email"
-                                       id="email" required/>
-                            </div>
 
                         @else
                             <div>User Name : {{$user->name}}</div>
@@ -116,7 +114,7 @@ $search_users = User::where('role', '=', 'User')->get()
                             <div>User Name : {{$user->email}}</div>
 
                         @endif
-                        <x-users.form.label for="services" class="text-lg" >Select the Services</x-users.form.label>
+                        <x-users.form.label for="services" class="text-lg">Select the Services</x-users.form.label>
                         @foreach(\App\Models\Service::pluck('name', 'id') as $service_id => $service_label)
                             <label>
                                 <input type="checkbox" name="services[]" value="{{$service_id}}">
