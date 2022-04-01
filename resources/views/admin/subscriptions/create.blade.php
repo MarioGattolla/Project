@@ -4,28 +4,27 @@
 
 use App\Models\User;
 
-$search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 'email']);
-
 ?>
 
 <x-app-layout>
     <x-slot name="header">
         <x-header>
             {{ __('Create a new Subscription:  ') }}
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
         </x-header>
 
         <script>
+
             function filterUser() {
                 return {
                     search: '',
-                    data: sourceData,
                     selectedUserIndex: '',
 
                     user: {
-                        id: null,
-                        name: null,
-                        surname: null,
-                        email: null,
+                        id: '1',
+                        name: '1',
+                        surname: '1',
+                        email: '1',
                     },
 
                     get filteredUser() {
@@ -55,7 +54,6 @@ $search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 
                 };
             }
 
-            let sourceData = @json($search_users);
 
         </script>
 
@@ -70,37 +68,56 @@ $search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 
 
                         @if($user->role->value == 'Admin')
                             <div x-data="filterUser()">
-                                <div class=" rounded-md  flex-col w-1/3 p-2 " >
+                                <div class=" rounded-md  flex-col w-1/3 p-2 ">
                                     <input class="w-full flex-col "
                                            type="search"
+                                           id="search"
                                            x-model="search" placeholder="Search for User"
                                            @click.away="reset()"
-                                           x-on:keyup.escape="reset()"
                                            x-on:keyup.down="selectNextUser()"
                                            x-on:keyup.up="selectPreviousUser()"
 
                                     />
+                                    <script>
 
+                                        $('#search').on('keyup',function(){
+                                            $value=$(this).val();
+                                            $.ajax({
+                                                type : 'get',
+                                                url : '{{URL::to('/subscriptions/create')}}',
+                                                data:{'search':$value},
+                                                success:function(data){
+                                              console.log(data);
+                                                }
+                                            });
 
-                                    <div class="overflow-y-auto max-h-52 border-2" x-show="filteredUser.length>0">
-                                        <template x-for="(selected_user, index) in filteredUser">
-                                            <option class=" p-2   rounded-md hover:bg-indigo-100"
-                                                    @click="user = selected_user"
-                                                    x-text="selected_user.name + ' ' + selected_user.surname"
-                                                    :class="{'bg-indigo-100': index===selectedUserIndex}">
-                                            </option>
+                                        })
 
-                                        </template>
-                                    </div>
+                                        $.ajaxSetup({headers: {'csrftoken': '{{ csrf_token() }}'}});
+
+                                    </script>
+
+                                    {{--                                    <div class="overflow-y-auto max-h-52 border-2" x-show="filteredUser.length>0">--}}
+                                    {{--                                        <template x-for="(selected_user, index) in filteredUser">--}}
+                                    {{--                                            <option class=" p-2   rounded-md hover:bg-indigo-100"--}}
+                                    {{--                                                    @click="user = selected_user"--}}
+                                    {{--                                                    x-text="selected_user.name + ' ' + selected_user.surname"--}}
+                                    {{--                                                    :class="{'bg-indigo-100': index===selectedUserIndex}">--}}
+                                    {{--                                            </option>--}}
+
+                                    {{--                                        </template>--}}
+                                    {{--                                    </div>--}}
                                 </div>
 
 
                                 <div name="user_form">
-                                    <input class="w-1/3 mb-3 hidden h-10" x-model="id" name="user.id" id="id"/>
+                                    <input class="w-1/3 mb-3 hidden h-10" x-model="user.id" name="id" id="id" required/>
                                     <div>User Name</div>
-                                    <input class=" w-1/3 mb-3 h-10" type="text" x-model="user.name" name="name" id="name" required/>
+                                    <input class=" w-1/3 mb-3 h-10" type="text" x-model="user.name" name="name"
+                                           id="name" required/>
                                     <div>User Surname</div>
-                                    <input class="w-1/3 mb-3 h-10" type="text" x-model="user.surname" name="surname" id="surname" required/>
+                                    <input class="w-1/3 mb-3 h-10" type="text" x-model="user.surname" name="surname"
+                                           id="surname" required/>
                                     <div>User Email</div>
                                     <input class=" w-1/3 mb-3 h-10" type="text" x-model="user.email" name="email"
                                            id="email" required/>

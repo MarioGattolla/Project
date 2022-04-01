@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SubscriptionController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\SearchUserController;
 use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::resource('services', ServiceController::class)->except('show');
     Route::post('/task/send_payment_reminder_emails', [PaymentReminderController::class, 'send_debit_reminder_emails'])->name('payments.reminder.send-emails');
 });
+
+Route::get('/',[SearchUserController::class, 'index'])->name('search_users_index');
+Route::get('/subscriptions/create',[SearchUserController::class, 'search'])->name('search_users');
 
 Route::resource('/payments', PaymentController::class);
 Route::resource('/subscriptions', SubscriptionController::class);
