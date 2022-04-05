@@ -18,7 +18,7 @@ use App\Models\User;
 
                 return {
                     search: '',
-                    selectedUserIndex: '',
+                    selectedUserIndex: 0,
                     user: {
                         id: null,
                         name: null,
@@ -27,38 +27,49 @@ use App\Models\User;
                     },
                     filteredUser: [],
 
+
                     searchUser(event) {
-                        event.
-                        console.debug('event', event);
 
-                        console.debug(`search user: ${this.search}`);
+                        if (event.keyCode > 36 && event.keyCode < 41) {
+                            return event.preventDefault();
+                        }
 
-
+                        if (this.search === '') {
+                            return this.filteredUser = '';
+                        }
                         axios.get('{{URL::to('/subscriptions/search')}}', {
                             'params': {'search': this.search}
                         }).then(response => {
-                            console.debug('response', response);
                             this.filteredUser = response.data;
                         });
+
+                        this.selectedUserIndex = 0;
                     },
 
 
                     reset() {
                         this.search = '';
+                        this.filteredUser = '';
                     },
 
                     selectNextUser() {
                         if (this.selectedUserIndex === '') {
                             this.selectedUserIndex = 0;
                         } else {
-                            this.selectedUserIndex++;
+                            if (this.selectedUserIndex < this.filteredUser.length - 1) {
+                                this.selectedUserIndex++;
+
+                            }
                         }
                     },
                     selectPreviousUser() {
                         if (this.selectedUserIndex === '') {
                             this.selectedUserIndex = 0;
                         } else {
-                            this.selectedUserIndex--;
+
+                            if (this.selectedUserIndex > 0) {
+                                this.selectedUserIndex--;
+                            }
                         }
                     },
                 };

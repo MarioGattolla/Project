@@ -58,5 +58,11 @@ test('payment.create return view', function () {
     expect($response)->toBeView('admin.payments.create');
 });
 
+test('payments_search_users return response', function () {
+
+    $request = Request::create('/payments/search', 'GET', ['search' => 'test']);
+    $response = app(PaymentController::class)->search($request);
+    expect($response)->toBeInstanceOf(\Symfony\Component\HttpFoundation\Response::class);
+});
 
 

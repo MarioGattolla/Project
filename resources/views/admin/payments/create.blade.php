@@ -4,8 +4,6 @@ use App\Models\User;
 
 /** @var User $user */
 
-$search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 'email']);
-
 ?>
 
 <x-app-layout>
@@ -15,46 +13,65 @@ $search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 
         </x-header>
         <script>
             function filterUser() {
+
                 return {
                     search: '',
-                    data: sourceData,
-                    selectedUserIndex: '',
-
+                    selectedUserIndex: 0,
                     user: {
                         id: null,
                         name: null,
                         surname: null,
                         email: null,
                     },
+                    filteredUser: [],
 
-                    get filteredUser() {
-                        if (this.search === '') {
-                            return [];
+
+                    searchUser(event) {
+
+                        if (event.keyCode > 36 && event.keyCode < 41) {
+                            return event.preventDefault();
                         }
-                        return this.data.filter(search => search.surname.toLowerCase().includes(this.search.toLowerCase()));
 
+                        if (this.search === '') {
+                            return this.filteredUser = '';
+                        }
+                        axios.get('{{URL::to('/payments/search')}}', {
+                            'params': {'search': this.search}
+                        }).then(response => {
+                            this.filteredUser = response.data;
+                        });
+
+                        this.selectedUserIndex = 0;
                     },
+
+
                     reset() {
                         this.search = '';
+                        this.filteredUser = '';
                     },
+
                     selectNextUser() {
                         if (this.selectedUserIndex === '') {
                             this.selectedUserIndex = 0;
                         } else {
-                            this.selectedUserIndex++;
+                            if (this.selectedUserIndex < this.filteredUser.length - 1) {
+                                this.selectedUserIndex++;
+
+                            }
                         }
                     },
                     selectPreviousUser() {
                         if (this.selectedUserIndex === '') {
                             this.selectedUserIndex = 0;
                         } else {
-                            this.selectedUserIndex--;
+
+                            if (this.selectedUserIndex > 0) {
+                                this.selectedUserIndex--;
+                            }
                         }
                     },
                 };
             }
-
-            let sourceData = @json($search_users);
 
         </script>
 
@@ -72,9 +89,11 @@ $search_users = User::where('role', '=', 'User')->get(['id', 'name', 'surname', 
                                 <div class=" rounded-md  flex-col w-1/3 p-2 ">
                                     <input class="w-full flex-col "
                                            type="search"
+                                           autocomplete="off"
+                                           id="search"
                                            x-model="search" placeholder="Search for User"
                                            @click.away="reset()"
-                                           x-on:keyup.escape="reset()"
+                                           x-on:keyup="searchUser"
                                            x-on:keyup.down="selectNextUser()"
                                            x-on:keyup.up="selectPreviousUser()"
 

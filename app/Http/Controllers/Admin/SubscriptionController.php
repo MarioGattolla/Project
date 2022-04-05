@@ -10,10 +10,13 @@ use App\Http\Controllers\Controller;
 use App\Models\Subscription;
 use App\Models\User;
 use Auth;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Response;
 use Illuminate\View\View;
 
 /** @var Subscription[] $subscriptions */
@@ -123,14 +126,12 @@ class SubscriptionController extends Controller
         return redirect()->route('subscriptions.index')->with('success', 'subscription deleted!!');
     }
 
-    public function search(Request $request)
+    public function search(Request $request): \Illuminate\Http\Response|Application|ResponseFactory
     {
-        if ($request->ajax()) {
 
-            $users = DB::table('users')->where('surname', 'like', "%" . $request->search . "%")
-                ->get(['id', 'name', 'surname', 'email']);
-            return response($users);
-        }
+        $users = DB::table('users')->where('surname', 'like', "%" . $request->search . "%")
+            ->get(['id', 'name', 'surname', 'email']);
+        return response($users);
     }
 }
 

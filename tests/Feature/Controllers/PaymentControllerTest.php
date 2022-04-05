@@ -99,7 +99,7 @@ test('admin can delete payment', function () {
     /** @var Payment $payment */
     $payment = Payment::factory()->create();
 
-    $response = $this->actingAs($user)->delete(route('payments.destroy',  $payment));
+    $response = $this->actingAs($user)->delete(route('payments.destroy', $payment));
 
     expect($response)->toHaveStatus(302)->assertRedirect(route('payments.index'));
 });
@@ -118,7 +118,7 @@ test('payment.store return redirect', function ($role) {
 
     $response = app(PaymentController::class)->store($request);
 
-    expect($response)->toBeRedirect(route('payments.index') );
+    expect($response)->toBeRedirect(route('payments.index'));
 })->with(function () {
     return collect(Role::cases())->keyBy(fn(Role $role) => $role->value)->except('Admin');
 });
@@ -139,7 +139,7 @@ test('payment.store return redirect with Admin', closure: function () {
 
     $response = app(PaymentController::class)->store($request);
 
-    expect($response)->toBeRedirect(route('payments.index') );
+    expect($response)->toBeRedirect(route('payments.index'));
 });
 
 test('payment.update return redirect', function () {
@@ -157,9 +157,9 @@ test('payment.update return redirect', function () {
         'date' => '2020-10-21',
     ]);
 
-    $response = app(PaymentController::class)->update($request,  $payment);
+    $response = app(PaymentController::class)->update($request, $payment);
 
-    expect($response)->toBeRedirect(route('payments.show',  $payment));
+    expect($response)->toBeRedirect(route('payments.show', $payment));
 });
 
 test('payment.destroy return redirect', function () {
@@ -177,6 +177,38 @@ test('payment.destroy return redirect', function () {
     expect($response)->toBeRedirect(route('payments.index'));
 });
 
+it('can search users', function () {
+
+    User::factory()->count(5)->role(Role::user)->create();
+
+
+    $users = User::factory()->role(Role::user)->count(2)->create(['surname' => 'Surname'])
+        ->map(fn(User $user) => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'surname' => $user->surname,
+            'email' => $user->email,
+        ]);
+
+    /** @var User $admin */
+    $admin = User::factory()->role(Role::admin)->create();
+
+    actingAs($admin);
+
+    $request = Request::create('/payments/search', 'GET', [
+        'search' => 'sur',
+    ]);
+
+    $response = app(PaymentController::class)->search($request);
+
+    /** @var User[] $filtered_users */
+    $filtered_users = $response->original;
+
+    expect($filtered_users)->toHaveCount(2)->toMatchArray($users);
+
+
+
+});
 
 
 

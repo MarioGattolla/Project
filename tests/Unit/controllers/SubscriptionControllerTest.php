@@ -59,4 +59,11 @@ test('subscription.create return view', function () {
     expect($response)->toBeView('admin.subscriptions.create');
 });
 
+test('subscriptions_search_users return response', function () {
+
+    $request = Request::create('/subscriptions/search', 'GET', ['search' => 'test']);
+    $response = app(SubscriptionController::class)->search($request);
+    expect($response)->toBeInstanceOf(\Symfony\Component\HttpFoundation\Response::class);
+});
+
 

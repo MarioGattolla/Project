@@ -39,7 +39,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::post('/task/send_payment_reminder_emails', [PaymentReminderController::class, 'send_debit_reminder_emails'])->name('payments.reminder.send-emails');
 });
 
-Route::get('/subscriptions/search',[SubscriptionController::class, 'search'])->name('search_users');
+Route::get('/subscriptions/search',[SubscriptionController::class, 'search'])->name('subscriptions_search_users');
+Route::get('/payments/search',[PaymentController::class, 'search'])->name('payments_search_users');
+
 
 Route::resource('/payments', PaymentController::class);
 Route::resource('/subscriptions', SubscriptionController::class);

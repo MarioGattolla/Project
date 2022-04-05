@@ -11,10 +11,14 @@ use App\Models\Payment;
 use App\Models\User;
 use Auth;
 use Carbon\Carbon;
+use Composer\Console\Application;
 use DefStudio\Actions\Exceptions\ActionException;
 use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\ResponseFactory;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 
@@ -132,6 +136,15 @@ class PaymentController extends Controller
         DeletePayment::run($payment);
 
         return redirect()->route('payments.index')->with('success', 'Payment successfully deleted!!');
+    }
+
+
+    public function search(Request $request): Response|Application|ResponseFactory
+    {
+
+        $users = DB::table('users')->where('surname', 'like', "%" . $request->search . "%")
+            ->get(['id', 'name', 'surname', 'email']);
+        return response($users);
     }
 
 }
