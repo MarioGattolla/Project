@@ -98,7 +98,7 @@ test('admin can edit subscription', function () {
 test('admin can delete subscription', function () {
 
     /** @var Service $service */
-   Service::factory()->count(3)->create();
+    Service::factory()->count(3)->create();
 
     /** @var User $user */
     $user = User::factory()->role(Role::user)->withRandomSubscriptions()->create();
@@ -150,7 +150,7 @@ test('subscription.store return redirect with admin', function () {
     actingAs($admin);
 
     $request = \Illuminate\Http\Request::create('/subscriptions/create', 'POST', [
-        'id'=> $user->id,
+        'id' => $user->id,
         'services' => [1, 2],
         'start' => '2022-03-01',
         'end' => '2023-01-24',
@@ -167,7 +167,7 @@ test('subscription.store return redirect with admin', function () {
 test('subscription.update return redirect', function () {
 
     /** @var Service $service */
-   Service::factory()->count(3)->create();
+    Service::factory()->count(3)->create();
 
     /** @var User $user */
     $user = User::factory()->create();
@@ -193,7 +193,7 @@ test('subscription.update return redirect', function () {
 test('subscription.destroy return redirect', function () {
 
     /** @var User $user */
-   User::factory()->create();
+    User::factory()->create();
 
     /** @var Subscription $subscription */
     $subscription = Subscription::factory()->make();
@@ -203,4 +203,35 @@ test('subscription.destroy return redirect', function () {
     $response = app(SubscriptionController::class)->destroy($subscription);
 
     expect($response)->toBeRedirect(route('subscriptions.index'));
+});
+
+it('can search users', function () {
+
+    User::factory()->count(5)->role(Role::user)->create();
+
+
+    $users = User::factory()->role(Role::user)->count(2)->create(['surname' => 'Surname'])
+        ->map(fn(User $user) => [
+            'id' => $user->id,
+            'name' => $user->name,
+            'surname' => $user->surname,
+            'email' => $user->email,
+        ]);
+
+    /** @var User $admin */
+    $admin = User::factory()->role(Role::admin)->create();
+
+    actingAs($admin);
+
+    $request = Request::create('/subscriptions/search', 'GET', [
+        'search' => 'sur',
+    ]);
+
+    $response = app(SubscriptionController::class)->search($request);
+
+    /** @var User[] $filtered_users */
+    $filtered_users = $response->original;
+
+    expect($filtered_users)->toHaveCount(2);
+
 });

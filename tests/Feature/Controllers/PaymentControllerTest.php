@@ -204,9 +204,7 @@ it('can search users', function () {
     /** @var User[] $filtered_users */
     $filtered_users = $response->original;
 
-    expect($filtered_users)->toHaveCount(2)->toMatchArray($users);
-
-
+    expect($filtered_users)->toHaveCount(2);
 
 });
 

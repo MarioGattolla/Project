@@ -12,8 +12,8 @@ use App\Models\User;
             {{ __('Create a new Payment:  ') }}
         </x-header>
         <script>
-            function filterUser() {
 
+            function filterUser() {
                 return {
                     search: '',
                     selectedUserIndex: 0,
@@ -27,7 +27,6 @@ use App\Models\User;
 
 
                     searchUser(event) {
-
                         if (event.keyCode > 36 && event.keyCode < 41) {
                             return event.preventDefault();
                         }

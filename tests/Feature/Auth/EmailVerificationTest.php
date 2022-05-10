@@ -38,9 +38,10 @@ use function PHPUnit\Framework\assertTrue;
 //    assertTrue($response);
 //});
 
+uses(RefreshDatabase::class);
+
 class EmailVerificationTest extends TestCase
 {
-    use RefreshDatabase;
 
     public function test_email_verification_screen_can_be_rendered()
     {
